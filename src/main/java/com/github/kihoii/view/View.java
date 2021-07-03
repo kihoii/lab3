@@ -1,0 +1,114 @@
+package com.github.kihoii.view;
+
+import com.github.kihoii.Pacman;
+import com.github.kihoii.model.Model;
+import com.github.kihoii.utils.enums.States;
+import com.github.kihoii.utils.observer.FieldUpdate;
+import com.github.kihoii.view.panels.*;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyListener;
+import java.io.IOException;
+
+public class View implements Runnable, FieldUpdate {
+
+    private final Model model;
+
+    private final ActionListener actionListener;
+
+    private final JFrame mainWindow;
+    private final MenuPanel menuPanel;
+    private GamePanel gamePanel;
+    private final PausePanel pausePanel;
+    private ScorePanel scorePanel;
+
+    private JPanel curPanel;
+
+    public View(Model model, ActionListener actionListener)  {
+        this.model = model;
+        this.actionListener = actionListener;
+
+        menuPanel = new MenuPanel(actionListener);
+        pausePanel = new PausePanel(actionListener);
+        try{
+            scorePanel = new ScorePanel(actionListener);
+        } catch (IOException e){
+            System.out.println(e.getMessage());
+        }
+
+        curPanel = menuPanel;
+
+        mainWindow = new JFrame("Pacman");
+        mainWindow.getContentPane().setBackground(Color.BLACK);
+        mainWindow.setSize(376, 500);
+        mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        mainWindow.setLocationRelativeTo(null);
+        mainWindow.addKeyListener((KeyListener) actionListener);
+        mainWindow.add(curPanel);
+        mainWindow.setResizable(false);
+        mainWindow.setFocusable(true);
+        mainWindow.setVisible(true);
+    }
+
+
+
+    @Override
+    public void handleEvent() {
+        switch (Model.getCurState()) {
+            case MENU -> {
+                mainWindow.remove(curPanel);
+                curPanel = menuPanel;
+                mainWindow.add(curPanel);
+                SwingUtilities.updateComponentTreeUI(mainWindow);
+            }
+            case START -> {
+                mainWindow.remove(curPanel);
+                model.setCurState(States.IN_PROC);
+                gamePanel = new GamePanel(actionListener);
+                curPanel = gamePanel;
+                mainWindow.add(curPanel);
+                SwingUtilities.updateComponentTreeUI(mainWindow);
+            }
+            case IN_PROC ->
+                    gamePanel.updateField(model.getScreenData(), model.getScore(), model.getLives());
+            case END -> {
+                try{
+                    scorePanel.update();
+                } catch (IOException e){
+                    System.out.println(e.getMessage());
+                }
+                Pacman.timer.stop();
+                mainWindow.remove(curPanel);
+                curPanel = new EndPanel(actionListener, model.getScore());
+                mainWindow.add(curPanel);
+                SwingUtilities.updateComponentTreeUI(mainWindow);
+            }
+            case PAUSE -> {
+                Pacman.timer.stop();
+                mainWindow.remove(curPanel);
+                curPanel = pausePanel;
+                mainWindow.add(curPanel);
+                SwingUtilities.updateComponentTreeUI(mainWindow);
+            } case CONTINUE -> {
+                mainWindow.remove(curPanel);
+                curPanel = gamePanel;
+                mainWindow.add(curPanel);
+                model.setCurState(States.IN_PROC);
+                Pacman.timer.start();
+                SwingUtilities.updateComponentTreeUI(mainWindow);
+            } case SCORES -> {
+                mainWindow.remove(curPanel);
+                curPanel = scorePanel;
+                mainWindow.add(curPanel);
+                SwingUtilities.updateComponentTreeUI(mainWindow);
+            }
+        }
+    }
+
+    @Override
+    public void run() {
+
+    }
+}
