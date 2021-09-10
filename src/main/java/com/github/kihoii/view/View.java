@@ -1,6 +1,7 @@
 package com.github.kihoii.view;
 
-import com.github.kihoii.Pacman;
+import com.github.kihoii.Game;
+import com.github.kihoii.controller.Controller;
 import com.github.kihoii.model.Model;
 import com.github.kihoii.utils.enums.States;
 import com.github.kihoii.utils.observer.FieldUpdate;
@@ -12,11 +13,12 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyListener;
 import java.io.IOException;
 
-public class View implements Runnable, FieldUpdate {
+public class View implements FieldUpdate {
 
     private final Model model;
 
-    private final ActionListener actionListener;
+    //private final ActionListener actionListener;
+    private final Controller myListener;
 
     private final JFrame mainWindow;
     private final MenuPanel menuPanel;
@@ -26,14 +28,15 @@ public class View implements Runnable, FieldUpdate {
 
     private JPanel curPanel;
 
-    public View(Model model, ActionListener actionListener)  {
+    public View(Model model, Controller viewListener)  {
         this.model = model;
-        this.actionListener = actionListener;
+        //this.actionListener = actionListener;
+        myListener = viewListener;
 
-        menuPanel = new MenuPanel(actionListener);
-        pausePanel = new PausePanel(actionListener);
+        menuPanel = new MenuPanel(myListener);
+        pausePanel = new PausePanel(myListener);
         try{
-            scorePanel = new ScorePanel(actionListener);
+            scorePanel = new ScorePanel(viewListener);
         } catch (IOException e){
             System.out.println(e.getMessage());
         }
@@ -45,7 +48,8 @@ public class View implements Runnable, FieldUpdate {
         mainWindow.setSize(376, 500);
         mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainWindow.setLocationRelativeTo(null);
-        mainWindow.addKeyListener((KeyListener) actionListener);
+       // mainWindow.addKeyListener((KeyListener) actionListener);
+        mainWindow.addKeyListener((KeyListener) viewListener);
         mainWindow.add(curPanel);
         mainWindow.setResizable(false);
         mainWindow.setFocusable(true);
@@ -55,8 +59,8 @@ public class View implements Runnable, FieldUpdate {
 
 
     @Override
-    public void handleEvent() {
-        switch (Model.getCurState()) {
+    public void handleEvent(States state) {
+        switch (state) {
             case MENU -> {
                 mainWindow.remove(curPanel);
                 curPanel = menuPanel;
@@ -64,29 +68,30 @@ public class View implements Runnable, FieldUpdate {
                 SwingUtilities.updateComponentTreeUI(mainWindow);
             }
             case START -> {
+                System.out.println("Start");
                 mainWindow.remove(curPanel);
-                model.setCurState(States.IN_PROC);
-                gamePanel = new GamePanel(actionListener);
+                gamePanel = new GamePanel(myListener, model.getPacman(), model.getGhosts());
                 curPanel = gamePanel;
                 mainWindow.add(curPanel);
                 SwingUtilities.updateComponentTreeUI(mainWindow);
             }
             case IN_PROC ->
-                    gamePanel.updateField(model.getScreenData(), model.getScore(), model.getLives());
+                    gamePanel.updateField(model.getScreenData(), model.getScore(),
+                            model.getPacman(), model.getGhosts());
             case END -> {
                 try{
                     scorePanel.update();
                 } catch (IOException e){
                     System.out.println(e.getMessage());
                 }
-                Pacman.timer.stop();
+                Game.timer.stop();
                 mainWindow.remove(curPanel);
-                curPanel = new EndPanel(actionListener, model.getScore());
+                curPanel = new EndPanel(myListener, model.getScore());
                 mainWindow.add(curPanel);
                 SwingUtilities.updateComponentTreeUI(mainWindow);
             }
             case PAUSE -> {
-                Pacman.timer.stop();
+                Game.timer.stop();
                 mainWindow.remove(curPanel);
                 curPanel = pausePanel;
                 mainWindow.add(curPanel);
@@ -96,7 +101,7 @@ public class View implements Runnable, FieldUpdate {
                 curPanel = gamePanel;
                 mainWindow.add(curPanel);
                 model.setCurState(States.IN_PROC);
-                Pacman.timer.start();
+                Game.timer.start();
                 SwingUtilities.updateComponentTreeUI(mainWindow);
             } case SCORES -> {
                 mainWindow.remove(curPanel);
@@ -107,8 +112,4 @@ public class View implements Runnable, FieldUpdate {
         }
     }
 
-    @Override
-    public void run() {
-
-    }
 }

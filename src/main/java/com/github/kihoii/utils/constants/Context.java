@@ -17,9 +17,6 @@ public class Context {
 
     public static final short[] map = Map.mapData;
 
-    public static int req_dx, req_dy;
-    public static int pacman_x, pacman_y;
-    public static int pacman_dx, pacman_dy;
     public static int PACMAN_SPEED = 3;
     public static final int START_X = 7 * BLOCK_SIZE;
     public static final int START_Y = 12 * BLOCK_SIZE;
@@ -28,9 +25,6 @@ public class Context {
 
     public static int N_GHOSTS = 4;
     public static int GHOSTS_SPEED = 3;
-    public static int[] dx, dy;
-    public static int[] ghosts_x, ghosts_y;
-    public static int[] ghosts_dx, ghosts_dy;
 
     public static int N_DOTS = 159;
     public static int TOTAL_SCORE = N_DOTS*10;

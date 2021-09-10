@@ -7,21 +7,10 @@ import com.github.kihoii.view.View;
 
 import javax.swing.*;
 
-public class Pacman implements Runnable {
-
-    private static Pacman instance;
+public class Game implements Runnable {
 
     private static Controller controller;
     public static Timer timer;
-
-    private Pacman(){}
-
-    public static Pacman getInstance(){
-        if (instance == null) {
-            instance = new Pacman();
-        }
-        return instance;
-    }
 
     @Override
     public void run() {
@@ -33,7 +22,6 @@ public class Pacman implements Runnable {
 
         timer = new Timer(Context.TIMER_DELAY, e -> controller.handleTimerRequest());
         //timer.start();
-
 
     }
 }

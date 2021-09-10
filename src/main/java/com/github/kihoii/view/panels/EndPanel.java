@@ -1,5 +1,8 @@
 package com.github.kihoii.view.panels;
 
+import com.github.kihoii.controller.ActionType;
+import com.github.kihoii.controller.Controller;
+import com.github.kihoii.controller.ViewListener;
 import com.github.kihoii.utils.CreateButton;
 
 import javax.swing.*;
@@ -16,10 +19,10 @@ public class EndPanel extends JPanel {
 
     private final int score;
 
-    private final ActionListener actionListener;
+    private final ViewListener myListener;
 
-    public EndPanel(ActionListener actionListener, int score){
-        this.actionListener = actionListener;
+    public EndPanel(ViewListener actionListener, int score){
+        this.myListener = actionListener;
         this.score = score;
         createEndPanel();
     }
@@ -27,11 +30,11 @@ public class EndPanel extends JPanel {
     private void createEndPanel(){
         JButton menuButton = new CreateButton().create("MENU");
         menuButton.setBounds(80, 220, 100, 50);
-        menuButton.addActionListener(actionListener);
+        menuButton.addActionListener(e -> myListener.onAction(ActionType.MENU));
 
         JButton continueButton = new CreateButton().create("AGAIN");
         continueButton.setBounds(190, 220, 100, 50);
-        continueButton.addActionListener(actionListener);
+        continueButton.addActionListener(e -> myListener.onAction(ActionType.START));
 
         label.setFont(menuFNT);
         label.setForeground(Color.YELLOW);

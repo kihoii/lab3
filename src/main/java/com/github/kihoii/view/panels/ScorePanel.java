@@ -1,9 +1,13 @@
 package com.github.kihoii.view.panels;
 
+import com.github.kihoii.controller.ActionType;
+import com.github.kihoii.controller.Controller;
+import com.github.kihoii.controller.ViewListener;
 import com.github.kihoii.utils.constants.Context;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
 import java.util.Arrays;
@@ -13,13 +17,13 @@ public class ScorePanel extends JPanel {
     private final JLabel label = new JLabel("<html><center>HIGH<br>SCORES</center></html>");
     private final JLabel out = new JLabel();
 
-    private final ActionListener actionListener;
+    //private final ActionListener actionListener;
 
     private final Font menuFNT = new Font("arial", Font.BOLD, 50);
     private final Font smallFNT = new Font("arial", Font.BOLD, 20);
 
-    public ScorePanel(ActionListener actionListener) throws IOException {
-        this.actionListener = actionListener;
+    public ScorePanel(ViewListener actionListener) throws IOException {
+        myListener = actionListener;
         getFirst();
         createScorePanel();
     }
@@ -37,6 +41,8 @@ public class ScorePanel extends JPanel {
         createScorePanel();
     }
 
+    private final ViewListener myListener;
+
     private void createScorePanel() {
         label.setFont(menuFNT);
         label.setForeground(Color.YELLOW);
@@ -49,7 +55,8 @@ public class ScorePanel extends JPanel {
         menuButton.setBorder(BorderFactory.createLineBorder(Color.YELLOW));
         menuButton.setSize(new Dimension(100,50));
         menuButton.setBounds(240, 400, 100, 50);
-        menuButton.addActionListener(actionListener);
+        menuButton.addActionListener(e -> myListener.onAction(ActionType.MENU));
+        //menuButton.addActionListener(actionListener);
 
         Arrays.sort(Context.scores, Collections.reverseOrder());
 

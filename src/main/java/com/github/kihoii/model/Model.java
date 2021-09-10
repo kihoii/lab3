@@ -1,8 +1,9 @@
 package com.github.kihoii.model;
 
-import com.github.kihoii.Pacman;
-import com.github.kihoii.model.ghosts.RandomGhosts;
+import com.github.kihoii.model.ghosts.Ghost;
+import com.github.kihoii.model.ghosts.MoveGhosts;
 import com.github.kihoii.model.pacman.MovePacman;
+import com.github.kihoii.model.pacman.Pacman;
 import com.github.kihoii.utils.constants.Context;
 import com.github.kihoii.utils.enums.Direction;
 import com.github.kihoii.utils.enums.States;
@@ -12,11 +13,14 @@ import com.github.kihoii.utils.observer.Observable;
 public class Model implements Observable {
 
     public static int score;
-    private int lives;
-    public static boolean alive;
 
     private static States curState;
     private FieldUpdate fieldUpdate;
+
+    private int req_dx, req_dy;
+
+    private Pacman pacman;
+    private Ghost[] ghosts;
 
     public Model(){
         curState = States.MENU;
@@ -28,25 +32,25 @@ public class Model implements Observable {
         curState = States.START;
         initData();
         initGame();
+        //curState = States.IN_PROC;
+        //setCurState(States.IN_PROC);
         notifyObservers();
-        Pacman.timer.start();
+        curState = States.IN_PROC;
+        //Game.timer.start();
     }
 
     private void initData(){
-        Context.ghosts_x = new int[Context.N_GHOSTS];
-        Context.ghosts_y = new int[Context.N_GHOSTS];
-        Context.ghosts_dx = new int[Context.N_GHOSTS];
-        Context.ghosts_dy = new int[Context.N_GHOSTS];
-        Context.dx = new int[Context.N_GHOSTS];
-        Context.dy = new int[Context.N_GHOSTS];
+        pacman = new Pacman();
+        ghosts = new Ghost[4];
+        for(int i = 0; i < 4; i++){
+            ghosts[i] = new Ghost();
+        }
 
         screenData = new short[Context.HIGH * Context.WEIGHT];
     }
 
 
     private void initGame(){
-        alive = true;
-        lives = 3;
         score = 0;
         initLevel();
     }
@@ -54,80 +58,81 @@ public class Model implements Observable {
     private void initLevel(){
         int size = Context.WEIGHT * Context.HIGH;
         System.arraycopy(Context.map, 0, screenData, 0, size);
-        initStartCoords();
+        initGhostsCoords();
+    }
+
+    private void initGhostsCoords(){
+        ghosts[0].setCoords(7 * Context.BLOCK_SIZE, 6 * Context.BLOCK_SIZE);
+        ghosts[1].setCoords(6 * Context.BLOCK_SIZE, 7 * Context.BLOCK_SIZE);
+        ghosts[2].setCoords(7 * Context.BLOCK_SIZE, 7 * Context.BLOCK_SIZE);
+        ghosts[3].setCoords(8 * Context.BLOCK_SIZE, 7 * Context.BLOCK_SIZE);
     }
 
     private void initStartCoords(){
-        Context.ghosts_x[0] = 7 * Context.BLOCK_SIZE;
-        Context.ghosts_y[0] = 6 * Context.BLOCK_SIZE;
-
-        Context.ghosts_x[1] = 6 * Context.BLOCK_SIZE;
-        Context.ghosts_y[1] = 7 * Context.BLOCK_SIZE;
-
-        Context.ghosts_x[2] = 7 * Context.BLOCK_SIZE;
-        Context.ghosts_y[2] = 7 * Context.BLOCK_SIZE;
-
-        Context.ghosts_x[3] = 8 * Context.BLOCK_SIZE;
-        Context.ghosts_y[3] = 7 * Context.BLOCK_SIZE;
-
-        Context.pacman_x = Context.START_X;
-        Context.pacman_y = Context.START_Y;
-
-        Context.pacman_dx = 0;
-        Context.pacman_dy = 0;
-        Context.req_dx = 0;
-        Context.req_dy = 0;
+        initGhostsCoords();
+        pacman.setCoords(Context.START_X, Context.START_Y, Direction.NONE);
     }
 
 
     public void moveGhosts(){
-        RandomGhosts.move();
+        MoveGhosts.move(pacman, ghosts, screenData);
     }
 
     public void movePacman(Direction d){
 
         switch(d){
             case UP -> {
-                Context.req_dx = 0;
-                Context.req_dy = -1;
+                req_dx = 0;
+                req_dy = -1;
             }
             case DOWN -> {
-                Context.req_dx = 0;
-                Context.req_dy = 1;
+                req_dx = 0;
+                req_dy = 1;
             }
             case RIGHT -> {
-                Context.req_dx = 1;
-                Context.req_dy = 0;
+                req_dx = 1;
+                req_dy = 0;
             }
             case LEFT -> {
-                Context.req_dx = -1;
-                Context.req_dy = 0;
+                req_dx = -1;
+                req_dy = 0;
+            } case NONE -> {
+                req_dx = 0;
+                req_dy = 0;
             }
         }
 
         moveGhosts();
 
-        if(MovePacman.move()){
-            Context.pacman_x += Context.pacman_dx * Context.PACMAN_SPEED;
-            Context.pacman_y += Context.pacman_dy * Context.PACMAN_SPEED;
-            if(!alive){
-                lives--;
-                if (lives > 0) {
-                    alive = true;
-                    initStartCoords();
-                }
-                else if (lives == 0){
-                    curState = States.END;
-                    if(score >= Context.scores[9]) {
-                        Context.scores[9] = score;
-                    }
-                }
-            }
-            if (score % Context.TOTAL_SCORE == 0){
-                initLevel();
-            }
+        if(MovePacman.move(pacman, req_dx, req_dy)){
+            int pacmanX = pacman.getX(), pacmanY = pacman.getY();
+            pacmanX += pacman.getDx() * Context.PACMAN_SPEED;
+            pacmanY += pacman.getDy() * Context.PACMAN_SPEED;
 
+            pacman.setCoords(pacmanX, pacmanY, d);
         }
+
+        if(!pacman.getAlive()){
+            if (pacman.getLives() > 0) {
+                pacman.setAlive(true);
+                d = Direction.NONE;
+                pacman.setDxy(0,0);
+                initStartCoords();
+            }
+            else if (pacman.getLives() <= 0){
+                //System.out.println("end");
+                curState = States.END;
+                if(score >= Context.scores[9]) {
+                    Context.scores[9] = score;
+                }
+            }
+        }
+
+        if (score % Context.TOTAL_SCORE == 0){
+            initLevel();
+        }
+
+        pacman.setDirection(d);
         notifyObservers();
     }
 
@@ -142,14 +147,19 @@ public class Model implements Observable {
 
     public void setCurState(States s){
         curState = s;
+        notifyObservers();
     }
 
     public short[] getScreenData() {
         return screenData;
     }
 
-    public int getLives(){
-        return lives;
+    public Pacman getPacman(){
+        return pacman;
+    }
+
+    public Ghost[] getGhosts(){
+        return ghosts;
     }
 
     @Override
@@ -159,7 +169,7 @@ public class Model implements Observable {
 
     @Override
     public void notifyObservers() {
-        fieldUpdate.handleEvent();
+        fieldUpdate.handleEvent(curState);
     }
 
 }

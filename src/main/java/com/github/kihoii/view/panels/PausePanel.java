@@ -1,22 +1,24 @@
 package com.github.kihoii.view.panels;
 
+import com.github.kihoii.controller.ActionType;
+import com.github.kihoii.controller.Controller;
+import com.github.kihoii.controller.ViewListener;
 import com.github.kihoii.utils.CreateButton;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionListener;
 
 public class PausePanel extends JPanel {
 
 
     private final JLabel label = new JLabel("PAUSE");
 
-    private final ActionListener actionListener;
+    private final ViewListener myListener;
 
     private final Font menuFNT = new Font("arial", Font.BOLD, 50);
 
-    public PausePanel(ActionListener actionListener){
-        this.actionListener = actionListener;
+    public PausePanel(ViewListener actionListener){
+        this.myListener = actionListener;
         creatPausePanel();
     }
 
@@ -24,15 +26,15 @@ public class PausePanel extends JPanel {
 
         JButton menuButton = new CreateButton().create("MENU");
         menuButton.setBounds(130, 150, 100, 50);
-        menuButton.addActionListener(actionListener);
+        menuButton.addActionListener(e -> myListener.onAction(ActionType.MENU));
 
         JButton exitButton = new CreateButton().create("EXIT");
         exitButton.setBounds(130, 290, 100, 50);
-        exitButton.addActionListener(actionListener);
+        exitButton.addActionListener(e -> myListener.onAction(ActionType.EXIT));
 
         JButton continueButton = new CreateButton().create("RESUME");
         continueButton.setBounds(130, 220, 100, 50);
-        continueButton.addActionListener(actionListener);
+        continueButton.addActionListener(e -> myListener.onAction(ActionType.RESUME));
 
         label.setFont(menuFNT);
         label.setForeground(Color.YELLOW);
