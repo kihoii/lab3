@@ -1,6 +1,6 @@
 package com.github.kihoii.view;
 
-import com.github.kihoii.Game;
+import com.github.kihoii.Main;
 import com.github.kihoii.controller.Controller;
 import com.github.kihoii.model.Model;
 import com.github.kihoii.utils.enums.States;
@@ -49,7 +49,7 @@ public class View implements FieldUpdate {
         mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainWindow.setLocationRelativeTo(null);
        // mainWindow.addKeyListener((KeyListener) actionListener);
-        mainWindow.addKeyListener((KeyListener) viewListener);
+        mainWindow.addKeyListener(viewListener);
         mainWindow.add(curPanel);
         mainWindow.setResizable(false);
         mainWindow.setFocusable(true);
@@ -84,14 +84,14 @@ public class View implements FieldUpdate {
                 } catch (IOException e){
                     System.out.println(e.getMessage());
                 }
-                Game.timer.stop();
+                Main.timer.stop();
                 mainWindow.remove(curPanel);
                 curPanel = new EndPanel(myListener, model.getScore());
                 mainWindow.add(curPanel);
                 SwingUtilities.updateComponentTreeUI(mainWindow);
             }
             case PAUSE -> {
-                Game.timer.stop();
+                Main.timer.stop();
                 mainWindow.remove(curPanel);
                 curPanel = pausePanel;
                 mainWindow.add(curPanel);
@@ -101,7 +101,7 @@ public class View implements FieldUpdate {
                 curPanel = gamePanel;
                 mainWindow.add(curPanel);
                 model.setCurState(States.IN_PROC);
-                Game.timer.start();
+                Main.timer.start();
                 SwingUtilities.updateComponentTreeUI(mainWindow);
             } case SCORES -> {
                 mainWindow.remove(curPanel);

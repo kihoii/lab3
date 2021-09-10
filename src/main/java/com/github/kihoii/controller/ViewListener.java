@@ -1,6 +1,6 @@
 package com.github.kihoii.controller;
 
-import com.github.kihoii.Game;
+import com.github.kihoii.Main;
 import com.github.kihoii.model.Model;
 import com.github.kihoii.utils.enums.States;
 
@@ -20,7 +20,7 @@ public class ViewListener {
             case EXIT -> System.exit(0);
             case START -> {
                 model.initNewModel();
-                Game.timer.start();
+                Main.timer.start();
             }
             case SCORE ->
                     model.setCurState(States.SCORES);

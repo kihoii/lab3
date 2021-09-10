@@ -18,10 +18,6 @@ public class CreateButton {
 
         return button;
     }
-
-
-    static class MyButton extends JButton {
-        MyButton() {}
-    }
+    
 
 }
