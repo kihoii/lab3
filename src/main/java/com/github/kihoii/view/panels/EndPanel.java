@@ -1,13 +1,11 @@
 package com.github.kihoii.view.panels;
 
 import com.github.kihoii.controller.ActionType;
-import com.github.kihoii.controller.Controller;
 import com.github.kihoii.controller.ViewListener;
-import com.github.kihoii.utils.CreateButton;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionListener;
+import java.io.IOException;
 
 public class EndPanel extends JPanel {
 
@@ -28,13 +26,25 @@ public class EndPanel extends JPanel {
     }
 
     private void createEndPanel(){
-        JButton menuButton = new CreateButton().create("MENU");
+        JButton menuButton = new MenuButton("MENU");
         menuButton.setBounds(80, 220, 100, 50);
-        menuButton.addActionListener(e -> myListener.onAction(ActionType.MENU));
+        menuButton.addActionListener(e -> {
+            try {
+                myListener.onAction(ActionType.MENU);
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
+        });
 
-        JButton continueButton = new CreateButton().create("AGAIN");
+        JButton continueButton = new MenuButton("AGAIN");
         continueButton.setBounds(190, 220, 100, 50);
-        continueButton.addActionListener(e -> myListener.onAction(ActionType.START));
+        continueButton.addActionListener(e -> {
+            try {
+                myListener.onAction(ActionType.START);
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
+        });
 
         label.setFont(menuFNT);
         label.setForeground(Color.YELLOW);

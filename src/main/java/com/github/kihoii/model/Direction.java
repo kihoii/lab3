@@ -1,6 +1,5 @@
-package com.github.kihoii.utils.enums;
+package com.github.kihoii.model;
 
-// CR: move enums to packages that use them
 public enum Direction {
     UP(1),
     DOWN(-1),

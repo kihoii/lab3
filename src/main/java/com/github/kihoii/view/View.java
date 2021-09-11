@@ -3,21 +3,19 @@ package com.github.kihoii.view;
 import com.github.kihoii.Main;
 import com.github.kihoii.controller.Controller;
 import com.github.kihoii.model.Model;
+import com.github.kihoii.utils.ScoreUtils;
 import com.github.kihoii.utils.enums.States;
 import com.github.kihoii.utils.observer.FieldUpdate;
 import com.github.kihoii.view.panels.*;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyListener;
 import java.io.IOException;
 
 public class View implements FieldUpdate {
 
     private final Model model;
 
-    //private final ActionListener actionListener;
     private final Controller myListener;
 
     private final JFrame mainWindow;
@@ -28,9 +26,12 @@ public class View implements FieldUpdate {
 
     private JPanel curPanel;
 
-    public View(Model model, Controller viewListener)  {
+    private final short[] map;
+
+    public View(Model model, Controller viewListener, short[] map)  {
         this.model = model;
-        //this.actionListener = actionListener;
+        this.map = map;
+
         myListener = viewListener;
 
         menuPanel = new MenuPanel(myListener);
@@ -48,7 +49,6 @@ public class View implements FieldUpdate {
         mainWindow.setSize(376, 500);
         mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainWindow.setLocationRelativeTo(null);
-       // mainWindow.addKeyListener((KeyListener) actionListener);
         mainWindow.addKeyListener(viewListener);
         mainWindow.add(curPanel);
         mainWindow.setResizable(false);
@@ -59,7 +59,7 @@ public class View implements FieldUpdate {
 
 
     @Override
-    public void handleEvent(States state) {
+    public void handleEvent(States state) throws IOException {
         switch (state) {
             case MENU -> {
                 mainWindow.remove(curPanel);
@@ -68,26 +68,21 @@ public class View implements FieldUpdate {
                 SwingUtilities.updateComponentTreeUI(mainWindow);
             }
             case START -> {
-                // CR: please remove redundant prints
-                System.out.println("Start");
                 mainWindow.remove(curPanel);
-                gamePanel = new GamePanel(myListener, model.getPacman(), model.getGhosts());
+                gamePanel = new GamePanel(myListener, model.getPacman(), model.getGhosts(), map);
                 curPanel = gamePanel;
                 mainWindow.add(curPanel);
                 SwingUtilities.updateComponentTreeUI(mainWindow);
             }
             case IN_PROC ->
-                    gamePanel.updateField(model.getScreenData(), model.getScore(),
+                    gamePanel.updateField(model.getScreenData(), model.getPacman().getScore(),
                             model.getPacman(), model.getGhosts());
             case END -> {
-                try{
-                    scorePanel.update();
-                } catch (IOException e){
-                    System.out.println(e.getMessage());
-                }
+
+                ScoreUtils.scoreUpdate(model.getPacman().getScore());
                 Main.timer.stop();
                 mainWindow.remove(curPanel);
-                curPanel = new EndPanel(myListener, model.getScore());
+                curPanel = new EndPanel(myListener, model.getPacman().getScore());
                 mainWindow.add(curPanel);
                 SwingUtilities.updateComponentTreeUI(mainWindow);
             }
@@ -101,7 +96,7 @@ public class View implements FieldUpdate {
                 mainWindow.remove(curPanel);
                 curPanel = gamePanel;
                 mainWindow.add(curPanel);
-                model.setCurState(States.IN_PROC);
+                //model.setCurState(States.IN_PROC);
                 Main.timer.start();
                 SwingUtilities.updateComponentTreeUI(mainWindow);
             } case SCORES -> {

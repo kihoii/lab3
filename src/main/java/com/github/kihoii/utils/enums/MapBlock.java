@@ -1,7 +1,6 @@
 package com.github.kihoii.utils.enums;
 
-// CR: plural -> singular
-public enum MapBlocks {
+public enum MapBlock {
 
     /* 0 - barrier
      * 1 - left border
@@ -11,7 +10,6 @@ public enum MapBlocks {
      * 16 - simple dot
      * 32 - ghost house entrance
      */
-    BARRIER(0),
     L_BORDER(1),
     UP_BORDER(2),
     R_BORDER(4),
@@ -22,14 +20,11 @@ public enum MapBlocks {
 
     private final int k;
 
-    MapBlocks(int i) {
+    MapBlock(int i) {
         k = i;
     }
 
-    // CR: replace it with function like 
-    // CR: boolean is(short block) { return k & block; }
-    // CR: btw, why k?
-    public int get(){
-        return k;
+    public int get(short block){
+        return k & block;
     }
 }

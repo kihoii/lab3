@@ -1,19 +1,16 @@
 package com.github.kihoii.view.panels;
 
 import com.github.kihoii.controller.ActionType;
-import com.github.kihoii.controller.Controller;
 import com.github.kihoii.controller.ViewListener;
-import com.github.kihoii.utils.CreateButton;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionListener;
+import java.io.IOException;
 
 public class MenuPanel extends JPanel {
 
     private final JLabel label = new JLabel("PACMAN");
 
-    //private final ActionListener actionListener;
     private final ViewListener myListener;
 
     private final Font menuFNT = new Font("arial", Font.BOLD, 50);
@@ -25,19 +22,37 @@ public class MenuPanel extends JPanel {
 
     private void creatMenuPanel(){
 
-        JButton playButton = new CreateButton().create("START");
+        JButton playButton = new MenuButton("START");
         playButton.setBounds(130, 150, 100, 50);
-        playButton.addActionListener(e -> myListener.onAction(ActionType.START));
+        playButton.addActionListener(e -> {
+            try {
+                myListener.onAction(ActionType.START);
+            } catch (IOException fileNotFoundException) {
+                fileNotFoundException.printStackTrace();
+            }
+        });
 
-        JButton scoreTableButton = new CreateButton().create("SCORES");
+        JButton scoreTableButton = new MenuButton("<html><center>SCORE<br>TABLE</center></html>");
         scoreTableButton.setBounds(130, 220, 100, 50);
         // CR: i think text can be aligned without writing raw html
-        scoreTableButton.setText("<html><center>SCORE<br>TABLE</center></html>");
-        scoreTableButton.addActionListener(e -> myListener.onAction(ActionType.SCORE));
+        // i didn't find the way
+        scoreTableButton.addActionListener(e -> {
+            try {
+                myListener.onAction(ActionType.SCORE);
+            } catch (IOException fileNotFoundException) {
+                fileNotFoundException.printStackTrace();
+            }
+        });
 
-        JButton exitButton = new CreateButton().create("EXIT");
+        JButton exitButton = new MenuButton("EXIT");
         exitButton.setBounds(130, 290, 100, 50);
-        exitButton.addActionListener(e -> myListener.onAction(ActionType.EXIT));
+        exitButton.addActionListener(e -> {
+            try {
+                myListener.onAction(ActionType.EXIT);
+            } catch (IOException fileNotFoundException) {
+                fileNotFoundException.printStackTrace();
+            }
+        });
 
         label.setFont(menuFNT);
         label.setForeground(Color.YELLOW);
