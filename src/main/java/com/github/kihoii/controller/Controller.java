@@ -1,14 +1,9 @@
 package com.github.kihoii.controller;
 
-import com.github.kihoii.Game;
-import com.github.kihoii.model.Model;
-import com.github.kihoii.utils.enums.Direction;
-import com.github.kihoii.utils.enums.States;
+import com.github.kihoii.model.*;
+import com.github.kihoii.utils.enums.*;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.event.*;
 
 public class Controller extends ViewListener implements KeyListener {
 
@@ -24,7 +19,8 @@ public class Controller extends ViewListener implements KeyListener {
 
 
     @Override
-    public synchronized void keyTyped(KeyEvent e) {}
+    public synchronized void keyTyped(KeyEvent e) {
+    }
 
     @Override
     public synchronized void keyPressed(KeyEvent e) {
