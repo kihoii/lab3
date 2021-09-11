@@ -6,6 +6,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 
+// CR: move to classes that use this constants
 public class Context {
 
     public static final int N_BLOCKS = 15;

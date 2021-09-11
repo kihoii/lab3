@@ -68,6 +68,7 @@ public class View implements FieldUpdate {
                 SwingUtilities.updateComponentTreeUI(mainWindow);
             }
             case START -> {
+                // CR: please remove redundant prints
                 System.out.println("Start");
                 mainWindow.remove(curPanel);
                 gamePanel = new GamePanel(myListener, model.getPacman(), model.getGhosts());

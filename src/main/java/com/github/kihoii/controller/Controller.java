@@ -9,6 +9,7 @@ public class Controller extends ViewListener implements KeyListener {
 
     private final Model model;
 
+    // CR: can be a local variable, not a field
     private Direction d;
 
     public Controller(Model model) {
@@ -27,6 +28,7 @@ public class Controller extends ViewListener implements KeyListener {
         switch (e.getKeyCode()) {
             case KeyEvent.VK_DOWN -> {
                 d = Direction.DOWN;
+                // CR: can extract from switch
                 model.movePacman(d);
             }
             case KeyEvent.VK_LEFT -> {
@@ -44,10 +46,13 @@ public class Controller extends ViewListener implements KeyListener {
         }
     }
 
+    // CR: why synchronized?
     public synchronized void handleTimerRequest() {
+        // CR: can just call movePacman with no args, model already has the knowledge about pacman's direction 
         model.movePacman(model.getPacman().getDirection());
     }
 
+    // CR: please use KeyAdapter instead of KeyListener
     @Override
     public synchronized void keyReleased(KeyEvent e) {
     }

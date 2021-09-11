@@ -7,6 +7,7 @@ import com.github.kihoii.utils.enums.States;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+// CR: i would've expected ViewListener to be an interface and its logic to be inside of controller
 public class ViewListener {
 
     private Model model;
@@ -20,6 +21,7 @@ public class ViewListener {
             case EXIT -> System.exit(0);
             case START -> {
                 model.initNewModel();
+                // CR: shouldn't we stop it first? not sure, please check 
                 Main.timer.start();
             }
             case SCORE ->

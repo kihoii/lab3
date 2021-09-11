@@ -23,6 +23,7 @@ public class GamePanel extends JPanel {
 
     int lives;
 
+    // CR: view shouldn't know anything about model objects
     private Pacman pacman;
     private Ghost[] ghosts;
 
@@ -50,6 +51,11 @@ public class GamePanel extends JPanel {
         this.setLayout(null);
     }
 
+    // CR: I'd expect that this method would have the following signature:
+    // CR: updateField(GameObject[] gameObjects, int score, int lives)
+    // CR: where GameObject is the enum with constants like WALL, PACMAN, GHOST and so on
+    // CR: this method would be called from the Controller and Controller would convert model specific objects like
+    // CR: Pacman, Ghost, short[] screenData into this GameObject array
     public void updateField(short[] screenData, int score, Pacman pacman, Ghost[] ghosts){
         this.screenData = screenData;
         this.score = score;

@@ -3,6 +3,9 @@ package com.github.kihoii.utils;
 import javax.swing.*;
 import java.awt.*;
 
+// CR: move to view
+// CR: create class MenuButton extends JButton with parameter String name
+// CR: move all of the stuff from create into the MenuButton constructor 
 public class CreateButton {
 
     private final Font buttonFNT = new Font("arial", Font.BOLD, 20);

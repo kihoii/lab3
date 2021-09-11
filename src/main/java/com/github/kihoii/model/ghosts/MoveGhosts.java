@@ -7,6 +7,10 @@ import com.github.kihoii.utils.enums.Direction;
 import com.github.kihoii.utils.enums.MapBlocks;
 import com.github.kihoii.utils.enums.States;
 
+// CR: rename class to ModelUtils
+// CR: rename move -> moveGhosts
+// CR: every ghost should have method move inside of it, so it's encapsulated inside Ghost class
+// CR: same thing is true for pacman
 public class MoveGhosts {
 
     public static void move(Pacman pacman, Ghost[] ghosts, short[] screenData){
@@ -54,6 +58,7 @@ public class MoveGhosts {
 
                 if (count == 0) {
 
+                    // CR: what is 15?
                     if ((screenData[pos] & 15) == 15) {
                         ghosts[i].setDxy(Direction.NONE.get(),Direction.NONE.get());
                     } else {

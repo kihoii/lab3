@@ -1,5 +1,6 @@
 package com.github.kihoii.utils.enums;
 
+// CR: plural -> singular
 public enum MapBlocks {
 
     /* 0 - barrier
@@ -25,6 +26,9 @@ public enum MapBlocks {
         k = i;
     }
 
+    // CR: replace it with function like 
+    // CR: boolean is(short block) { return k & block; }
+    // CR: btw, why k?
     public int get(){
         return k;
     }

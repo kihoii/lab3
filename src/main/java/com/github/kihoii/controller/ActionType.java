@@ -6,5 +6,5 @@ public enum ActionType {
     SCORE,
     PAUSE,
     RESUME,
-    EXIT;
+    EXIT
 }

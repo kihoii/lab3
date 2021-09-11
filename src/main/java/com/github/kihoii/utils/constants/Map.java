@@ -1,5 +1,6 @@
 package com.github.kihoii.utils.constants;
 
+// CR: move to resources
 public class Map {
 
     /* 0 - barrier

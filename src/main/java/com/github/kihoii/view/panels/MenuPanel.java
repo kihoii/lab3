@@ -31,6 +31,7 @@ public class MenuPanel extends JPanel {
 
         JButton scoreTableButton = new CreateButton().create("SCORES");
         scoreTableButton.setBounds(130, 220, 100, 50);
+        // CR: i think text can be aligned without writing raw html
         scoreTableButton.setText("<html><center>SCORE<br>TABLE</center></html>");
         scoreTableButton.addActionListener(e -> myListener.onAction(ActionType.SCORE));
 

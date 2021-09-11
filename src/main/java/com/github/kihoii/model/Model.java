@@ -12,11 +12,16 @@ import com.github.kihoii.utils.observer.Observable;
 
 public class Model implements Observable {
 
+    // CR: please move it to Pacman
     public static int score;
 
+    // CR: model shouldn't be bounded to possible states of view
+    // CR: probably the only thing that it might know is the state of the game (stopped / running)
+    // CR: and even that is probably redundant
     private static States curState;
     private FieldUpdate fieldUpdate;
 
+    // CR: naming
     private int req_dx, req_dy;
 
     private Pacman pacman;

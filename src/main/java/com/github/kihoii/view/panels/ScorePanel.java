@@ -28,7 +28,9 @@ public class ScorePanel extends JPanel {
         createScorePanel();
     }
 
+    // CR: please move all work related to file into class ScoreUtils and make this methods static
     public void update() throws IOException {
+        // CR: please update existing file, do not rewrite it completely
         if (Context.file.delete()) {
             if(!Context.file.createNewFile()) System.out.println("File wasn't created");
         }
@@ -88,6 +90,7 @@ public class ScorePanel extends JPanel {
         int i = 0;
         while((c = fileReader.read()) != -1){
             if (c == '\n') {
+                // CR: i'd use Scanner instead 
                 Context.scores[i] = Integer.parseInt(number.toString());
                 i++;
                 number = new StringBuilder();
