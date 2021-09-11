@@ -47,6 +47,7 @@ public class Controller extends KeyAdapter implements ViewListener {
             case EXIT -> System.exit(0);
             case START -> {
                 model.initNewModel();
+                model.notifyObservers(States.START);
                 // CR: shouldn't we stop it first? not sure, please check
                 // it starts with the game start and stops with the end
                 Main.timer.start();

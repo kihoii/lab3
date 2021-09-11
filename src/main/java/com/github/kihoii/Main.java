@@ -25,11 +25,9 @@ public class Main {
         short[] map = new short[WEIGHT*HIGH];
         Scanner scan = new Scanner(file);
 
-        int i = 0;
         for(int y = 0; y < WEIGHT*HIGH; y++) {
             scan.useDelimiter(", ");
-            map[i] = scan.nextShort();
-            i++;
+            map[y] = scan.nextShort();
         }
 
         Model model = new Model(map);

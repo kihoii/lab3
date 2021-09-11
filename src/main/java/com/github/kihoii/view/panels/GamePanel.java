@@ -82,6 +82,9 @@ public class GamePanel extends JPanel {
     // CR: where GameObject is the enum with constants like WALL, PACMAN, GHOST and so on
     // CR: this method would be called from the Controller and Controller would convert model specific objects like
     // CR: Pacman, Ghost, short[] screenData into this GameObject array
+    // slozhno neponyatno
+    // i have no idea how to organise all the waals (cuz wall and block isn't the same thing)
+    // even more pacman has a direction (it's not really matter but at least)
     public void updateField(short[] screenData, int score, Pacman pacman, Ghost[] ghosts){
         this.screenData = screenData;
         this.score = score;

@@ -72,6 +72,7 @@ public class View implements FieldUpdate {
                 gamePanel = new GamePanel(myListener, model.getPacman(), model.getGhosts(), map);
                 curPanel = gamePanel;
                 mainWindow.add(curPanel);
+
                 SwingUtilities.updateComponentTreeUI(mainWindow);
             }
             case IN_PROC ->

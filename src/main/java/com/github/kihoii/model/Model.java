@@ -36,10 +36,9 @@ public class Model implements Observable {
         this.map = map;
     }
 
-    public void initNewModel() throws IOException {
+    public void initNewModel()  {
         initData();
         initGame();
-        notifyObservers(States.START);
     }
 
     private void initData(){
