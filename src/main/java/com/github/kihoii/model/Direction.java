@@ -7,6 +7,7 @@ public enum Direction {
     LEFT(-1),
     NONE(0);
 
+    // CR: you don't need this field at all, just use Direction instead of int for dx, dy fields
     private final int k;
 
     Direction(int i) { k = i ;}

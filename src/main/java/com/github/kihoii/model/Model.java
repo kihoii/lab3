@@ -7,6 +7,8 @@ import com.github.kihoii.utils.observer.FieldUpdate;
 import com.github.kihoii.utils.observer.Observable;
 
 import java.io.IOException;
+import java.util.*;
+import java.util.stream.*;
 
 public class Model implements Observable {
 
@@ -104,6 +106,7 @@ public class Model implements Observable {
 
         moveGhosts();
 
+        // CR: all of the logic inside this if statement should be inside Pacman#movePackman
         if(pacman.movePacman(reqDx, reqDy)){
             int pacmanX = pacman.getX(), pacmanY = pacman.getY();
             pacmanX += pacman.getDx() * PACMAN_SPEED;
@@ -124,6 +127,7 @@ public class Model implements Observable {
             }
         }
 
+        // CR: constants
         int n_DOTS = 159;
         int TOTAL_SCORE = n_DOTS * 10;
         if (pacman.getScore() % TOTAL_SCORE == 0){
@@ -153,6 +157,9 @@ public class Model implements Observable {
 
     @Override
     public void notifyObservers(States state) throws IOException {
+        // CR: model should know nothing about MENU, SCORES and so on.
+        // CR: you don't need any observers at all, just return boolean from movePacman
+        // CR: that would signal if we continue the game or not
         fieldUpdate.handleEvent(state);
     }
 

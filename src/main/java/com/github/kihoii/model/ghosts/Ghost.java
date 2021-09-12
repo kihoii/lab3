@@ -7,6 +7,7 @@ import com.github.kihoii.utils.enums.MapBlock;
 public class Ghost {
 
     private int x, y;
+    // CR: this fields must have type Direction 
     private int dx, dy;
 
     public final int N_GHOSTS = 4;
@@ -31,6 +32,7 @@ public class Ghost {
         return y;
     }
 
+    // CR: moveGhost -> move
     public void moveGhost(Pacman pacman, short[] screenData){
         int count;
         int pos;
@@ -38,6 +40,7 @@ public class Ghost {
         int[] dxCount = new int[4];
         int[] dyCount = new int[4];
 
+        // CR: every ghost should move separately, it shouldn't know anything about other ghosts
         for (int i = 0; i < N_GHOSTS; i++){
             if (x % BLOCK_SIZE == 0
                     && y % BLOCK_SIZE == 0) {

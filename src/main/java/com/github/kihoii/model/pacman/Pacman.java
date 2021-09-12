@@ -4,6 +4,8 @@ import com.github.kihoii.model.Model;
 import com.github.kihoii.model.Direction;
 import com.github.kihoii.utils.enums.MapBlock;
 
+// CR: i think packages ghosts and pacman are redundant, they only contain one class each
+// CR: please move classes from this packages to model package
 public class Pacman {
 
     private int x, y;
@@ -38,6 +40,9 @@ public class Pacman {
     }
 
     public void setAlive(boolean alive){
+        // CR: that's very bug-prone and hard to read code when there are 
+        // CR: two things that do the same thing. i'd expect pacman just to have lives field
+        // CR: and method getAlive just check if lives != 0
         this.alive = alive;
     }
 
@@ -82,13 +87,14 @@ public class Pacman {
         return score;
     }
 
-    public boolean movePacman(int req_dx, int req_dy){
-        int pos;
-        short curBlock;
-
+    // CR: naming
+    // CR: req_dx -> reqDx, req_dx -> reqDy
+    // CR: movePacman -> move
+    public boolean movePacman(int req_dx, int req_dy) {
         if (x % BLOCK_SIZE == 0 && y % BLOCK_SIZE == 0) {
-            pos = x / BLOCK_SIZE + N_BLOCKS * (y / BLOCK_SIZE);
-            curBlock = Model.screenData[pos];
+            int pos = x / BLOCK_SIZE + N_BLOCKS * (y / BLOCK_SIZE);
+            // CR: just pass screenData as method parameter, global fields lead to subtle bugs
+            short curBlock = Model.screenData[pos];
 
             if ((MapBlock.DOT.get(curBlock)) != 0) {
                 Model.screenData[pos] = (short) (curBlock & 15);

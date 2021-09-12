@@ -14,7 +14,9 @@ public class Main {
 
     private static final File file = new File("src/main/resources/Map");
 
+    // CR: weight -> width
     public static final int WEIGHT = 15;
+    // CR: high -> height
     public static final int HIGH = 17;
 
     private static Controller controller;

@@ -48,17 +48,13 @@ public class Controller extends KeyAdapter implements ViewListener {
             case START -> {
                 model.initNewModel();
                 model.notifyObservers(States.START);
-                // CR: shouldn't we stop it first? not sure, please check
-                // it starts with the game start and stops with the end
                 Main.timer.start();
             }
+            // CR: just pass view to constructor and call it directly
             case SCORE -> model.notifyObservers(States.SCORES);
             case MENU -> model.notifyObservers(States.MENU);
             case RESUME -> model.notifyObservers(States.CONTINUE);
             case PAUSE -> model.notifyObservers(States.PAUSE);
         }
     }
-
-    // CR: please use KeyAdapter instead of KeyListener
-
 }
