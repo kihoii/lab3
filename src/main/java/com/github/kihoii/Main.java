@@ -6,7 +6,6 @@ import com.github.kihoii.view.View;
 
 import javax.swing.*;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Scanner;
 
@@ -14,37 +13,32 @@ public class Main {
 
     private static final File file = new File("src/main/resources/Map");
 
-    // CR: weight -> width
-    public static final int WEIGHT = 15;
-    // CR: high -> height
-    public static final int HIGH = 17;
+    public static final int WIDTH = 15;
+    public static final int HEIGHT = 17;
 
     private static Controller controller;
     public static Timer timer;
 
-    public static void main(String[] args) throws FileNotFoundException {
+    public static void main(String[] args) {
 
-        short[] map = new short[WEIGHT*HIGH];
-        Scanner scan = new Scanner(file);
-
-        for(int y = 0; y < WEIGHT*HIGH; y++) {
-            scan.useDelimiter(", ");
-            map[y] = scan.nextShort();
+        short[] map = new short[WIDTH * HEIGHT];
+        try {
+            Scanner scan = new Scanner(file);
+            for(int y = 0; y < WIDTH * HEIGHT; y++) {
+                scan.useDelimiter(", ");
+                map[y] = scan.nextShort();
+            }
+        } catch (IOException e){
+            System.err.println(e.getMessage());
         }
 
         Model model = new Model(map);
         controller = new Controller(model);
         View view = new View(model, controller, map);
-        model.addObserver(view);
+        controller.addObserver(view);
 
         int TIMER_DELAY = 40;
-        timer = new Timer(TIMER_DELAY, e -> {
-            try {
-                controller.handleTimerRequest();
-            } catch (IOException fileNotFoundException) {
-                fileNotFoundException.printStackTrace();
-            }
-        });
+        timer = new Timer(TIMER_DELAY, e -> controller.handleTimerRequest());
     }
 
 }

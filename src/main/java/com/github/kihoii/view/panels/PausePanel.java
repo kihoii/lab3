@@ -5,7 +5,6 @@ import com.github.kihoii.controller.ViewListener;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.IOException;
 
 public class PausePanel extends JPanel {
 
@@ -25,33 +24,15 @@ public class PausePanel extends JPanel {
 
         JButton menuButton = new MenuButton("MENU");
         menuButton.setBounds(130, 150, 100, 50);
-        menuButton.addActionListener(e -> {
-            try {
-                myListener.onAction(ActionType.MENU);
-            } catch (IOException ioException) {
-                ioException.printStackTrace();
-            }
-        });
+        menuButton.addActionListener(e -> myListener.onAction(ActionType.MENU));
 
         JButton exitButton = new MenuButton("EXIT");
         exitButton.setBounds(130, 290, 100, 50);
-        exitButton.addActionListener(e -> {
-            try {
-                myListener.onAction(ActionType.EXIT);
-            } catch (IOException ioException) {
-                ioException.printStackTrace();
-            }
-        });
+        exitButton.addActionListener(e -> myListener.onAction(ActionType.EXIT));
 
         JButton continueButton = new MenuButton("RESUME");
         continueButton.setBounds(130, 220, 100, 50);
-        continueButton.addActionListener(e -> {
-            try {
-                myListener.onAction(ActionType.RESUME);
-            } catch (IOException ioException) {
-                ioException.printStackTrace();
-            }
-        });
+        continueButton.addActionListener(e -> myListener.onAction(ActionType.RESUME));
 
         label.setFont(menuFNT);
         label.setForeground(Color.YELLOW);

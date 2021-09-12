@@ -1,38 +1,21 @@
 package com.github.kihoii.model;
 
-import com.github.kihoii.model.ghosts.Ghost;
-import com.github.kihoii.model.pacman.Pacman;
-import com.github.kihoii.utils.enums.States;
-import com.github.kihoii.utils.observer.FieldUpdate;
-import com.github.kihoii.utils.observer.Observable;
+public class Model {
 
-import java.io.IOException;
-import java.util.*;
-import java.util.stream.*;
-
-public class Model implements Observable {
-
-
-    public final int WEIGHT = 15;
-    public final int HIGH = 17;
+    public final int WIDTH = 15;
+    public final int HEIGHT = 17;
     public final int BLOCK_SIZE = 24;
 
-    public final int START_X = 7 * BLOCK_SIZE;
-    public final int START_Y = 12 * BLOCK_SIZE;
-
-    public int PACMAN_SPEED = 3;
+    private final int n_DOTS = 159;
+    public final int TOTAL_SCORE = n_DOTS * 10;
 
     private final short[] map;
-
-    private FieldUpdate fieldUpdate;
-
-    private int reqDx, reqDy;
 
     private Pacman pacman;
     private Ghost[] ghosts;
     private final int numberOfGhosts = 4;
 
-    public static short[] screenData;
+    public short[] screenData;
 
     public Model(short[] map){
         this.map = map;
@@ -50,12 +33,11 @@ public class Model implements Observable {
             ghosts[i] = new Ghost();
         }
 
-        screenData = new short[HIGH * WEIGHT];
+        screenData = new short[HEIGHT * WIDTH];
     }
 
-
     private void initGame(){
-        int size = WEIGHT * HIGH;
+        int size = WIDTH * HEIGHT;
         System.arraycopy(map, 0, screenData, 0, size);
         initGhostsCoords();
     }
@@ -67,75 +49,25 @@ public class Model implements Observable {
         ghosts[3].setCoords(8 * BLOCK_SIZE, 7 * BLOCK_SIZE);
     }
 
-    private void initStartCoords(){
-        initGhostsCoords();
-        pacman.setCoords(START_X, START_Y, Direction.NONE);
-    }
-
-
     public void moveGhosts(){
         for(int i = 0; i < numberOfGhosts; i++){
-            ghosts[i].moveGhost(pacman, screenData);
+            ghosts[i].move(screenData);
         }
     }
 
-    public void movePacman() throws IOException {
-
-        Direction d = pacman.getDirection();
-        switch(d){
-            case UP -> {
-                reqDx = 0;
-                reqDy = -1;
-            }
-            case DOWN -> {
-                reqDx = 0;
-                reqDy = 1;
-            }
-            case RIGHT -> {
-                reqDx = 1;
-                reqDy = 0;
-            }
-            case LEFT -> {
-                reqDx = -1;
-                reqDy = 0;
-            } case NONE -> {
-                reqDx = 0;
-                reqDy = 0;
-            }
-        }
-
+    public boolean movePacman() {
         moveGhosts();
-
-        // CR: all of the logic inside this if statement should be inside Pacman#movePackman
-        if(pacman.movePacman(reqDx, reqDy)){
-            int pacmanX = pacman.getX(), pacmanY = pacman.getY();
-            pacmanX += pacman.getDx() * PACMAN_SPEED;
-            pacmanY += pacman.getDy() * PACMAN_SPEED;
-
-            pacman.setCoords(pacmanX, pacmanY, d);
-        }
+        screenData = pacman.move(screenData, ghosts);
 
         if(!pacman.getAlive()){
-            if (pacman.getLives() > 0) {
-                pacman.setAlive(true);
-                d = Direction.NONE;
-                pacman.setDxy(0,0);
-                initStartCoords();
-            }
-            else if (pacman.getLives() <= 0){
-                notifyObservers(States.END);
-            }
+            return false;
         }
 
-        // CR: constants
-        int n_DOTS = 159;
-        int TOTAL_SCORE = n_DOTS * 10;
         if (pacman.getScore() % TOTAL_SCORE == 0){
             initGame();
         }
 
-        pacman.setDirection(d);
-        notifyObservers(States.IN_PROC);
+        return true;
     }
 
     public short[] getScreenData() {
@@ -150,17 +82,5 @@ public class Model implements Observable {
         return ghosts;
     }
 
-    @Override
-    public void addObserver(FieldUpdate fieldUpdate) {
-        this.fieldUpdate = fieldUpdate;
-    }
-
-    @Override
-    public void notifyObservers(States state) throws IOException {
-        // CR: model should know nothing about MENU, SCORES and so on.
-        // CR: you don't need any observers at all, just return boolean from movePacman
-        // CR: that would signal if we continue the game or not
-        fieldUpdate.handleEvent(state);
-    }
 
 }

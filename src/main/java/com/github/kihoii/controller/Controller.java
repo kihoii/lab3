@@ -2,14 +2,16 @@ package com.github.kihoii.controller;
 
 import com.github.kihoii.Main;
 import com.github.kihoii.model.*;
-import com.github.kihoii.utils.enums.*;
+import com.github.kihoii.utils.observer.FieldUpdate;
+import com.github.kihoii.utils.observer.Observable;
 
 import java.awt.event.*;
-import java.io.IOException;
 
-public class Controller extends KeyAdapter implements ViewListener {
+public class Controller extends KeyAdapter implements ViewListener, Observable {
 
     private final Model model;
+
+    private FieldUpdate fieldUpdate;
 
     public Controller(Model model) {
         this.model = model;
@@ -30,31 +32,45 @@ public class Controller extends KeyAdapter implements ViewListener {
                 model.getPacman().setDirection(Direction.UP);
 
         }
-        try {
-            model.movePacman();
-        } catch (IOException fileNotFoundException) {
-            fileNotFoundException.printStackTrace();
+        move();
+    }
+
+    private void move(){
+        if(model.movePacman()){
+            notifyObservers(States.IN_PROC);
+        } else {
+            System.out.println("not alive");
+            notifyObservers(States.END);
         }
     }
 
-    public void handleTimerRequest() throws IOException {
-        model.movePacman();
+    public void handleTimerRequest(){
+        move();
     }
 
     @Override
-    public void onAction(ActionType actionType) throws IOException {
+    public void onAction(ActionType actionType){
         switch (actionType) {
             case EXIT -> System.exit(0);
             case START -> {
                 model.initNewModel();
-                model.notifyObservers(States.START);
+                notifyObservers(States.START);
                 Main.timer.start();
             }
-            // CR: just pass view to constructor and call it directly
-            case SCORE -> model.notifyObservers(States.SCORES);
-            case MENU -> model.notifyObservers(States.MENU);
-            case RESUME -> model.notifyObservers(States.CONTINUE);
-            case PAUSE -> model.notifyObservers(States.PAUSE);
+            case SCORE -> notifyObservers(States.SCORES);
+            case MENU -> notifyObservers(States.MENU);
+            case RESUME -> notifyObservers(States.CONTINUE);
+            case PAUSE -> notifyObservers(States.PAUSE);
         }
+    }
+
+    @Override
+    public void addObserver(FieldUpdate fieldUpdate) {
+        this.fieldUpdate = fieldUpdate;
+    }
+
+    @Override
+    public void notifyObservers(States state) {
+        fieldUpdate.handleEvent(state);
     }
 }

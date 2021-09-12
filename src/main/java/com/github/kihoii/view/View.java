@@ -4,7 +4,7 @@ import com.github.kihoii.Main;
 import com.github.kihoii.controller.Controller;
 import com.github.kihoii.model.Model;
 import com.github.kihoii.utils.ScoreUtils;
-import com.github.kihoii.utils.enums.States;
+import com.github.kihoii.controller.States;
 import com.github.kihoii.utils.observer.FieldUpdate;
 import com.github.kihoii.view.panels.*;
 
@@ -59,7 +59,7 @@ public class View implements FieldUpdate {
 
 
     @Override
-    public void handleEvent(States state) throws IOException {
+    public void handleEvent(States state){
         switch (state) {
             case MENU -> {
                 mainWindow.remove(curPanel);

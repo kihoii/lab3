@@ -5,7 +5,6 @@ import com.github.kihoii.controller.ViewListener;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.IOException;
 
 public class EndPanel extends JPanel {
 
@@ -28,23 +27,11 @@ public class EndPanel extends JPanel {
     private void createEndPanel(){
         JButton menuButton = new MenuButton("MENU");
         menuButton.setBounds(80, 220, 100, 50);
-        menuButton.addActionListener(e -> {
-            try {
-                myListener.onAction(ActionType.MENU);
-            } catch (IOException ioException) {
-                ioException.printStackTrace();
-            }
-        });
+        menuButton.addActionListener(e -> myListener.onAction(ActionType.MENU));
 
         JButton continueButton = new MenuButton("AGAIN");
         continueButton.setBounds(190, 220, 100, 50);
-        continueButton.addActionListener(e -> {
-            try {
-                myListener.onAction(ActionType.START);
-            } catch (IOException ioException) {
-                ioException.printStackTrace();
-            }
-        });
+        continueButton.addActionListener(e -> myListener.onAction(ActionType.START));
 
         label.setFont(menuFNT);
         label.setForeground(Color.YELLOW);

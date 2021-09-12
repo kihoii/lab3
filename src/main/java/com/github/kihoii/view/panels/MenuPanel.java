@@ -5,7 +5,6 @@ import com.github.kihoii.controller.ViewListener;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.IOException;
 
 public class MenuPanel extends JPanel {
 
@@ -24,35 +23,17 @@ public class MenuPanel extends JPanel {
 
         JButton playButton = new MenuButton("START");
         playButton.setBounds(130, 150, 100, 50);
-        playButton.addActionListener(e -> {
-            try {
-                myListener.onAction(ActionType.START);
-            } catch (IOException fileNotFoundException) {
-                fileNotFoundException.printStackTrace();
-            }
-        });
+        playButton.addActionListener(e -> myListener.onAction(ActionType.START));
 
         JButton scoreTableButton = new MenuButton("<html><center>SCORE<br>TABLE</center></html>");
         scoreTableButton.setBounds(130, 220, 100, 50);
         // CR: i think text can be aligned without writing raw html
         // i didn't find the way
-        scoreTableButton.addActionListener(e -> {
-            try {
-                myListener.onAction(ActionType.SCORE);
-            } catch (IOException fileNotFoundException) {
-                fileNotFoundException.printStackTrace();
-            }
-        });
+        scoreTableButton.addActionListener(e ->  myListener.onAction(ActionType.SCORE));
 
         JButton exitButton = new MenuButton("EXIT");
         exitButton.setBounds(130, 290, 100, 50);
-        exitButton.addActionListener(e -> {
-            try {
-                myListener.onAction(ActionType.EXIT);
-            } catch (IOException fileNotFoundException) {
-                fileNotFoundException.printStackTrace();
-            }
-        });
+        exitButton.addActionListener(e -> myListener.onAction(ActionType.EXIT));
 
         label.setFont(menuFNT);
         label.setForeground(Color.YELLOW);

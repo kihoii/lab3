@@ -2,25 +2,21 @@ package com.github.kihoii.view.panels;
 
 import com.github.kihoii.controller.ActionType;
 import com.github.kihoii.controller.ViewListener;
-import com.github.kihoii.model.ghosts.Ghost;
-import com.github.kihoii.model.pacman.Pacman;
+import com.github.kihoii.model.Ghost;
+import com.github.kihoii.model.Pacman;
 import com.github.kihoii.model.Direction;
-import com.github.kihoii.utils.enums.MapBlock;
+import com.github.kihoii.utils.MapBlock;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.IOException;
 
 public class GamePanel extends JPanel {
-
-
 
     public final int WEIGHT = 15;
     public final int HIGH = 17;
     public final int BLOCK_SIZE = 24;
     public final int SCREEN_X = WEIGHT * BLOCK_SIZE;
     public final int SCREEN_Y = HIGH * BLOCK_SIZE;
-
 
     public final Image down = new ImageIcon("pics/down.gif").getImage();
     public final Image up = new ImageIcon("pics/up.gif").getImage();
@@ -31,9 +27,7 @@ public class GamePanel extends JPanel {
     public final Image ghost = new ImageIcon("pics/ghost.gif").getImage();
     public final Image heart = new ImageIcon("pics/heart.png").getImage();
 
-
     private short[] screenData;
-
 
     private final Font scoreFNT = new Font("arial", Font.BOLD, 15);
     private int score;
@@ -65,13 +59,7 @@ public class GamePanel extends JPanel {
         pauseButton.setBorder(BorderFactory.createLineBorder(Color.YELLOW));
         pauseButton.setSize(new Dimension(100,50));
         pauseButton.setBounds(20, 420, 70, 30);
-        pauseButton.addActionListener(e -> {
-            try {
-                myListener.onAction(ActionType.PAUSE);
-            } catch (IOException ioException) {
-                ioException.printStackTrace();
-            }
-        });
+        pauseButton.addActionListener(e -> myListener.onAction(ActionType.PAUSE));
 
         this.add(pauseButton);
         this.setLayout(null);
@@ -83,7 +71,7 @@ public class GamePanel extends JPanel {
     // CR: this method would be called from the Controller and Controller would convert model specific objects like
     // CR: Pacman, Ghost, short[] screenData into this GameObject array
     // slozhno neponyatno
-    // i have no idea how to organise all the waals (cuz wall and block isn't the same thing)
+    // i have no idea how to organise all the walls (cuz wall and block isn't the same thing)
     // even more pacman has a direction (it's not really matter but at least)
     public void updateField(short[] screenData, int score, Pacman pacman, Ghost[] ghosts){
         this.screenData = screenData;
@@ -112,11 +100,9 @@ public class GamePanel extends JPanel {
         g.setColor(Color.YELLOW);
         String s = "Score: " + score;
         g.drawString(s, 376/2+90, 450);
-
     }
 
     private void paintMap(Graphics2D g2d){
-
         short i = 0;
         for(int y = 0; y < SCREEN_Y; y += BLOCK_SIZE){
             for(int x = 0; x < SCREEN_X; x += BLOCK_SIZE){
@@ -127,30 +113,30 @@ public class GamePanel extends JPanel {
                     g2d.fillRect(x, y, BLOCK_SIZE, BLOCK_SIZE);
                 }
 
-                if ((MapBlock.L_BORDER.get(screenData[i])) != 0) {
+                if (!(MapBlock.L_BORDER.is(screenData[i]))) {
                     g2d.drawLine(x, y, x, y + BLOCK_SIZE - 1);
                 }
 
-                if ((MapBlock.UP_BORDER.get(screenData[i])) != 0) {
+                if (!(MapBlock.UP_BORDER.is(screenData[i]))) {
                     g2d.drawLine(x, y, x + BLOCK_SIZE - 1, y);
                 }
 
-                if ((MapBlock.R_BORDER.get(screenData[i])) != 0) {
+                if (!(MapBlock.R_BORDER.is(screenData[i]))) {
                     g2d.drawLine(x + BLOCK_SIZE - 1, y, x + BLOCK_SIZE - 1,
                             y + BLOCK_SIZE - 1);
                 }
 
-                if ((MapBlock.D_BORDER.get(screenData[i])) != 0) {
+                if (!(MapBlock.D_BORDER.is(screenData[i]))) {
                     g2d.drawLine(x, y + BLOCK_SIZE - 1, x + BLOCK_SIZE - 1,
                             y + BLOCK_SIZE - 1);
                 }
 
-                if ((MapBlock.DOT.get(screenData[i])) != 0) {
+                if (!(MapBlock.DOT.is(screenData[i]))) {
                     g2d.setColor(new Color(255,255,255));
                     g2d.fillOval(x + 10, y + 10, 6, 6);
                 }
 
-                if ((MapBlock.G_HOUSE.get(screenData[i])) != 0) {
+                if (!(MapBlock.G_HOUSE.is(screenData[i]))) {
                     g2d.setColor(new Color(121, 121, 121));
                     g2d.drawLine(x, y, x + BLOCK_SIZE - 1, y);
                 }
@@ -161,7 +147,6 @@ public class GamePanel extends JPanel {
     }
 
     private void paintPacman(Graphics2D g2d){
-
         if (pacman.getDirection().equals(Direction.LEFT)) {
             g2d.drawImage(left, pacman.getX() + 1, pacman.getY() + 1, this);
         } else if (pacman.getDirection().equals(Direction.RIGHT)) {
@@ -176,12 +161,9 @@ public class GamePanel extends JPanel {
     }
 
     private void paintGhosts(Graphics2D g2d){
-
         for(int i = 0; i < 4; i++){
             g2d.drawImage(ghost, ghosts[i].getX() + 1, ghosts[i].getY() + 1, this);
         }
-
     }
-
 
 }

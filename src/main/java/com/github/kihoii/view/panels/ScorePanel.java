@@ -38,13 +38,7 @@ public class ScorePanel extends JPanel {
         menuButton.setBorder(BorderFactory.createLineBorder(Color.YELLOW));
         menuButton.setSize(new Dimension(100,50));
         menuButton.setBounds(240, 400, 100, 50);
-        menuButton.addActionListener(e -> {
-            try {
-                myListener.onAction(ActionType.MENU);
-            } catch (IOException ioException) {
-                ioException.printStackTrace();
-            }
-        });
+        menuButton.addActionListener(e -> myListener.onAction(ActionType.MENU));
 
         Arrays.sort(ScoreUtils.scores, Collections.reverseOrder());
 
