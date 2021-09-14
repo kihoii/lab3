@@ -1,30 +1,20 @@
 package com.github.kihoii.model;
 
-import com.github.kihoii.utils.MapBlock;
+import com.github.kihoii.utils.*;
 
 public class Pacman {
 
-    private int x, y;
-    private int dx, dy;
-    private Direction direction;
-    private boolean alive;
-    private int lives;
+    private static final int BLOCK_SIZE = 24;
+    private static final int N_BLOCKS = 15;
+    private static final int PACMAN_SPEED = 3;
+
+    private int x = 7 * BLOCK_SIZE;
+    private int y = 12 * BLOCK_SIZE;
+    private int dx;
+    private int dy;
+    private Direction direction = Direction.NONE;
+    private int lives = 3;
     private int score;
-
-    public final int BLOCK_SIZE = 24;
-    public final int N_BLOCKS = 15;
-    public final int START_X = 7 * BLOCK_SIZE;
-    public final int START_Y = 12 * BLOCK_SIZE;
-    public int PACMAN_SPEED = 3;
-
-    public Pacman(){
-        score = 0;
-        lives = 3;
-        alive = true;
-        x = START_X;
-        y = START_Y;
-        direction = Direction.NONE;
-    }
 
     public void setCoords(int x, int y, Direction direction){
         this.x = x;
@@ -61,27 +51,20 @@ public class Pacman {
     }
 
     public short[] move(short[] screenData, Ghost[] ghosts) {
-        int reqDx = 0, reqDy = 0;
-        switch(direction){
-            case UP ->
-                reqDy = -1;
-            case DOWN ->
-                reqDy = 1;
-            case RIGHT -> {
-                reqDx = 1;
-                reqDy = 0;
-            }
-            case LEFT -> {
-                reqDx = -1;
-                reqDy = 0;
-            }
+        int reqDx = 0;
+        int reqDy = 0;
+        switch (direction) {
+            case UP -> reqDy = -1;
+            case DOWN -> reqDy = 1;
+            case RIGHT -> reqDx = 1;
+            case LEFT -> reqDx = -1;
         }
 
         if (x % BLOCK_SIZE == 0 && y % BLOCK_SIZE == 0) {
             int pos = x / BLOCK_SIZE + N_BLOCKS * (y / BLOCK_SIZE);
             short curBlock = screenData[pos];
 
-            if (!(MapBlock.DOT.is(curBlock))) {
+            if (!MapBlock.DOT.is(curBlock)) {
                 screenData[pos] = (short) (curBlock & 15);
                 score += 10;
             }
@@ -109,6 +92,7 @@ public class Pacman {
         x += dx * PACMAN_SPEED;
         y += dy * PACMAN_SPEED;
 
+        boolean hit = false;
         for (int i = 0 ; i < 4; i++){
             if (x > (ghosts[i].getX() - 12)
                     && x < (ghosts[i].getX() + 12)
@@ -116,23 +100,22 @@ public class Pacman {
                     && y < (ghosts[i].getY() + 12)) {
 
                 lives--;
-                alive = false;
+                hit = true;
             }
         }
 
-        if(!alive && lives > 0){
-            alive = true;
+        if(hit && lives > 0){
             direction = Direction.NONE;
             dx = 0;
             dy = 0;
-            x = START_X;
-            y = START_Y;
+            x = 7 * BLOCK_SIZE;
+            y = 12 * BLOCK_SIZE;
         }
 
         return screenData;
     }
 
-    public static boolean isPossibleToMove(int x, int y, short curBlock){
+    private static boolean isPossibleToMove(int x, int y, short curBlock){
         return !((x == -1 && y == 0 && (!MapBlock.L_BORDER.is(curBlock)))
                 || (x == 1 && y == 0 && (!MapBlock.R_BORDER.is(curBlock)))
                 || (x == 0 && y == -1 && (!MapBlock.UP_BORDER.is(curBlock)))
