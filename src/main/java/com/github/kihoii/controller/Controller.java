@@ -2,16 +2,15 @@ package com.github.kihoii.controller;
 
 import com.github.kihoii.Main;
 import com.github.kihoii.model.*;
-import com.github.kihoii.utils.Observable;
 import com.github.kihoii.view.View;
 
 import java.awt.event.*;
 
-public class Controller extends KeyAdapter implements ViewListener, Observable {
+public class Controller extends KeyAdapter implements ViewListener {
 
     private final Model model;
 
-    private View fieldUpdate;
+    private View view;
 
     public Controller(Model model) {
         this.model = model;
@@ -35,37 +34,32 @@ public class Controller extends KeyAdapter implements ViewListener, Observable {
         move();
     }
 
-    private void move(){
+    public void move(){
         if(model.move()){
-            fieldUpdate.updateField(model.getField(), model.getScore(), model.getLives());
+            view.updateField(model.getField(), model.getScore(), model.getLives());
         } else {
-            fieldUpdate.endGame(model.getScore());
+            view.endGame(model.getScore());
         }
-    }
-
-    public void handleTimerRequest(){
-        move();
     }
 
     @Override
     public void onAction(ActionType actionType){
         switch (actionType) {
-            case EXIT -> fieldUpdate.exitGame();
+            case EXIT -> view.exitGame();
             case START -> {
                 model.initNewModel();
-                fieldUpdate.startGame(model.getField());
+                view.startGame(model.getField());
                 Main.timer.start();
             }
-            case SCORE -> fieldUpdate.showScores();
-            case MENU -> fieldUpdate.openMenu();
-            case RESUME -> fieldUpdate.continueGame();
-            case PAUSE -> fieldUpdate.setPause();
+            case SCORE -> view.showScores();
+            case MENU -> view.openMenu();
+            case RESUME -> view.continueGame();
+            case PAUSE -> view.setPause();
         }
     }
 
-    @Override
-    public void addObserver(View fieldUpdate) {
-        this.fieldUpdate = fieldUpdate;
+    public void setView(View view) {
+        this.view = view;
     }
 
 }

@@ -15,6 +15,7 @@ public class Main {
 
     public static final int WIDTH = 15;
     public static final int HEIGHT = 17;
+    private static final int TIMER_DELAY = 40;
 
     private static Controller controller;
     public static Timer timer;
@@ -25,10 +26,9 @@ public class Main {
         Model model = new Model(map);
         controller = new Controller(model);
         View view = new View(controller, map);
-        controller.addObserver(view);
+        controller.setView(view);
 
-        int TIMER_DELAY = 40;
-        timer = new Timer(TIMER_DELAY, e -> controller.handleTimerRequest());
+        timer = new Timer(TIMER_DELAY, e -> controller.move());
     }
 
     private static short[] getMap(){
