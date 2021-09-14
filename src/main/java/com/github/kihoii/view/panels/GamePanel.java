@@ -12,6 +12,7 @@ import java.util.List;
 
 public class GamePanel extends JPanel {
 
+    // CR: private static final fields 
     public final int WIDTH = 15;
     public final int HEIGHT = 17;
     public final int BLOCK_SIZE = 24;
@@ -33,7 +34,9 @@ public class GamePanel extends JPanel {
         this.field = field;
         this.setPreferredSize(new Dimension(376,500));
 
+        // CR: should get this info from controller (that gets this info from model)
         score = 0;
+        // CR: should get this info from controller (that gets this info from model)
         lives = 3;
 
         JButton pauseButton = new JButton("PAUSE");

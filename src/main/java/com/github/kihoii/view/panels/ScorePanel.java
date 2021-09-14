@@ -13,6 +13,7 @@ import java.util.stream.*;
 
 public class ScorePanel extends JPanel {
 
+    // CR: this field should be a private final field inside ScoreFile (not static)
     private static Integer[] scores = new Integer[10];
 
     private final JLabel label = new JLabel("<html><center>HIGH<br>SCORES</center></html>");
@@ -63,6 +64,7 @@ public class ScorePanel extends JPanel {
         out.setText(text);
     }
 
+    // CR: this logic should be inside ScoreFile#addScore(int)
     public void updateScores(int score){
         if(score >= scores[9]) {
             scores[9] = score;

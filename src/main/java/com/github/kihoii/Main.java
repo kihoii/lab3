@@ -11,7 +11,7 @@ import java.util.Scanner;
 
 public class Main {
 
-    private static final File file = new File("src/main/resources/Map");
+    private static final File MAP_FILE = new File("src/main/resources/Map");
 
     public static final int WIDTH = 15;
     public static final int HEIGHT = 17;
@@ -34,7 +34,7 @@ public class Main {
     private static short[] getMap(){
         short[] map = new short[WIDTH * HEIGHT];
         try {
-            Scanner scan = new Scanner(file);
+            Scanner scan = new Scanner(MAP_FILE);
             for(int y = 0; y < WIDTH * HEIGHT; y++) {
                 scan.useDelimiter(", ");
                 map[y] = scan.nextShort();

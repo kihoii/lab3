@@ -6,6 +6,7 @@ public abstract class GameObject {
 
     private int x, y;
 
+    // CR: make them constructor params
     public void setCoords(int x, int y){
         this.x = x;
         this.y = y;
@@ -19,11 +20,13 @@ public abstract class GameObject {
         return y;
     }
 
+    // CR: abstract
     void accept(GameObjectVisitor visitor) {}
 
     public static class Pacman extends GameObject {
         private final Direction direction;
 
+        // CR: naming
         public Pacman(Direction direction_) {
             direction = direction_;
         }

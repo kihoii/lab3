@@ -8,22 +8,21 @@ import java.util.List;
 
 public class Model {
 
-    private final static int WIDTH = 15;
-    private final static int HEIGHT = 17;
-    private final static int BLOCK_SIZE = 24;
-    private final static int SCREEN_X = WIDTH * BLOCK_SIZE;
-    private final static int SCREEN_Y = HEIGHT * BLOCK_SIZE;
-
-    private final static int n_DOTS = 159;
-    private final static int TOTAL_SCORE = n_DOTS * 10;
+    static final int BLOCK_SIZE = 24;
+    private static final int WIDTH = 15;
+    private static final int HEIGHT = 17;
+    private static final int SCREEN_X = WIDTH * BLOCK_SIZE;
+    private static final int SCREEN_Y = HEIGHT * BLOCK_SIZE;
+    private static final int N_DOTS = 159;
+    private static final int TOTAL_SCORE = N_DOTS * 10;
+    private static final int NUMBER_OF_GHOSTS = 4;
 
     private final short[] map;
 
     private Pacman pacman;
     private Ghost[] ghosts;
-    private final static int numberOfGhosts = 4;
 
-    public short[] screenData;
+    private short[] screenData;
 
     public Model(short[] map){
         this.map = map;
@@ -35,8 +34,8 @@ public class Model {
     }
 
     private void initData(){
-        pacman = new Pacman();
-        ghosts = new Ghost[numberOfGhosts];
+        pacman = new Pacman(7 * BLOCK_SIZE, 12 * BLOCK_SIZE);
+        ghosts = new Ghost[NUMBER_OF_GHOSTS];
 
         screenData = new short[HEIGHT * WIDTH];
     }
@@ -55,13 +54,13 @@ public class Model {
     }
 
 
-    public void moveGhosts(){
-        for(int i = 0; i < numberOfGhosts; i++){
+    private void moveGhosts(){
+        for(int i = 0; i < NUMBER_OF_GHOSTS; i++){
             ghosts[i].move(screenData);
         }
     }
 
-    public void movePacman(){
+    private void movePacman(){
         screenData = pacman.move(screenData, ghosts);
     }
 

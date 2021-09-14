@@ -9,6 +9,17 @@ public class ScoreFile {
 
     private static final File file = new File("src/main/resources/HighScores");
 
+    // CR: this method should be non static and either return cached scores or extract them from file
+    // CR: e.g.
+    /*
+    CR:
+    int[] getScores() {
+        if (scores != null) return scores;
+        scores = read();
+        if (scores == null) scores = createScores();
+        return scores;
+    }
+     */
     public static Integer[] getScores(){
         Integer[] scores = new Integer[10];
         try {
@@ -28,6 +39,8 @@ public class ScoreFile {
         return scores;
     }
 
+    // CR: this method shouldn't be available to the clients,
+    // CR: save score should happen during ScoreFile#addScore(int)
     public static void saveScores(Integer[] scores){
         StringBuilder total = new StringBuilder();
 

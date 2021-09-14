@@ -9,6 +9,7 @@ import java.util.List;
 
 public class GameObjectPainter implements GameObjectVisitor {
 
+    // CR: naming
     private static final Image down = new ImageIcon("pics/down.gif").getImage();
     private static final Image up = new ImageIcon("pics/up.gif").getImage();
     private static final Image left = new ImageIcon("pics/left.gif").getImage();
@@ -24,6 +25,14 @@ public class GameObjectPainter implements GameObjectVisitor {
         this.g2d = g2d;
         this.im = im;
 
+        // CR: do it in separate method
+        /*
+        CR: 
+        static void paint(Graphics2D g2d, List<GameObject> field, ImageObserver im) {
+          GameObjectPainter painter = ...;
+          field.forEach(go -> go.accept(this));
+        }
+         */
         for (GameObject gameObject : field) {
             gameObject.accept(this);
         }

@@ -4,27 +4,20 @@ import com.github.kihoii.utils.*;
 
 public class Pacman {
 
-    private static final int BLOCK_SIZE = 24;
     private static final int N_BLOCKS = 15;
     private static final int PACMAN_SPEED = 3;
 
-    private int x = 7 * BLOCK_SIZE;
-    private int y = 12 * BLOCK_SIZE;
-    private Direction dx;
-    private Direction dy;
+    private int x;
+    private int y;
+    private Direction dx = Direction.NONE;
+    private Direction dy = Direction.NONE;
     private Direction direction = Direction.NONE;
     private int lives = 3;
     private int score;
 
-    public Pacman(){
-        dx = Direction.NONE;
-        dy = Direction.NONE;
-    }
-
-    public void setCoords(int x, int y, Direction direction){
+    public Pacman(int x, int y) {
         this.x = x;
         this.y = y;
-        this.direction = direction;
     }
 
     public boolean getAlive(){
@@ -56,7 +49,8 @@ public class Pacman {
     }
 
     public short[] move(short[] screenData, Ghost[] ghosts) {
-        Direction reqDx = Direction.NONE, reqDy = Direction.NONE;
+        Direction reqDx = Direction.NONE;
+        Direction reqDy = Direction.NONE;
         switch (direction) {
             case UP -> reqDy = Direction.UP;
             case DOWN -> reqDy = Direction.DOWN;
@@ -64,8 +58,8 @@ public class Pacman {
             case LEFT -> reqDx = Direction.LEFT;
         }
 
-        if (x % BLOCK_SIZE == 0 && y % BLOCK_SIZE == 0) {
-            int pos = x / BLOCK_SIZE + N_BLOCKS * (y / BLOCK_SIZE);
+        if (x % Model.BLOCK_SIZE == 0 && y % Model.BLOCK_SIZE == 0) {
+            int pos = x / Model.BLOCK_SIZE + N_BLOCKS * (y / Model.BLOCK_SIZE);
             short curBlock = screenData[pos];
 
             if (!MapBlock.DOT.is(curBlock)) {
@@ -73,7 +67,7 @@ public class Pacman {
                 score += 10;
             }
 
-            if (!reqDx.equals(Direction.NONE) || !reqDy.equals(Direction.NONE)) {
+            if (reqDx != Direction.NONE || reqDy != Direction.NONE) {
                 if (isPossibleToMove(reqDx.adjustSpeed(1), reqDy.adjustSpeed(1), curBlock)) {
                     dx = reqDx;
                     dy = reqDy;
@@ -112,13 +106,14 @@ public class Pacman {
             direction = Direction.NONE;
             dx = Direction.NONE;
             dy = Direction.NONE;
-            x = 7 * BLOCK_SIZE;
-            y = 12 * BLOCK_SIZE;
+            x = 7 * Model.BLOCK_SIZE;
+            y = 12 * Model.BLOCK_SIZE;
         }
 
         return screenData;
     }
 
+    // CR: pass x and y as Direction
     private static boolean isPossibleToMove(int x, int y, short curBlock){
         return !((x == -1 && y == 0 && (!MapBlock.L_BORDER.is(curBlock)))
                 || (x == 1 && y == 0 && (!MapBlock.R_BORDER.is(curBlock)))

@@ -1,22 +1,17 @@
 package com.github.kihoii.model;
 
-import com.github.kihoii.utils.MapBlock;
+import com.github.kihoii.utils.*;
 
 public class Ghost {
 
     private int x, y;
     private Direction dx, dy;
 
-    private final int BLOCK_SIZE = 24;
-    private final int N_BLOCKS = 15;
-    private final int SPEED = 3;
+    private static final int BLOCK_SIZE = 24;
+    private static final int N_BLOCKS = 15;
+    private static final int SPEED = 3;
 
     public Ghost(int x, int y){
-        this.x = x;
-        this.y = y;
-    }
-
-    public void setCoords(int x, int y){
         this.x = x;
         this.y = y;
     }
@@ -101,7 +96,7 @@ public class Ghost {
 
     private static boolean hasNoMoves(short block) {
         return MapBlock.UP_BORDER.is(block) &&
-                MapBlock.R_BORDER.is(block) && MapBlock.L_BORDER.is(block) &&
-                MapBlock.D_BORDER.is(block);
+               MapBlock.R_BORDER.is(block) && MapBlock.L_BORDER.is(block) &&
+               MapBlock.D_BORDER.is(block);
     }
 }
