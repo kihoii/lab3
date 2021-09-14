@@ -9,6 +9,7 @@ import java.util.List;
 
 public class GameObjectPainter implements GameObjectVisitor {
 
+    // CR: make fields private static 
     public final Image down = new ImageIcon("pics/down.gif").getImage();
     public final Image up = new ImageIcon("pics/up.gif").getImage();
     public final Image left = new ImageIcon("pics/left.gif").getImage();

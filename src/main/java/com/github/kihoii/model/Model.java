@@ -8,19 +8,23 @@ import java.util.List;
 
 public class Model {
 
+    // CR: make fields static and private
     public final int WIDTH = 15;
     public final int HEIGHT = 17;
     public final int BLOCK_SIZE = 24;
     public final int SCREEN_X = WIDTH * BLOCK_SIZE;
     public final int SCREEN_Y = HEIGHT * BLOCK_SIZE;
 
+    // CR: make field static
     private final int n_DOTS = 159;
+    // CR: make field static
     public final int TOTAL_SCORE = n_DOTS * 10;
 
     private final short[] map;
 
     private Pacman pacman;
     private Ghost[] ghosts;
+    // CR: make field static
     private final int numberOfGhosts = 4;
 
     public short[] screenData;
@@ -38,6 +42,7 @@ public class Model {
     }
 
     private void initData(){
+        // CR: pass coords as constructor parameters
         pacman = new Pacman();
         ghosts = new Ghost[numberOfGhosts];
         for(int i = 0; i < numberOfGhosts; i++){
@@ -54,6 +59,7 @@ public class Model {
     }
 
     private void initGhostsCoords(){
+        // CR: just pass this as constructor parameters
         ghosts[0].setCoords(7 * BLOCK_SIZE, 6 * BLOCK_SIZE);
         ghosts[1].setCoords(6 * BLOCK_SIZE, 7 * BLOCK_SIZE);
         ghosts[2].setCoords(7 * BLOCK_SIZE, 7 * BLOCK_SIZE);
@@ -106,6 +112,8 @@ public class Model {
         }
     }
 
+    
+    // CR: move logic from make field here. also use local variable instead of 'objectField' field
     public List<GameObject> getField(){
         return objectField;
     }
@@ -122,10 +130,12 @@ public class Model {
         pacman.setDirection(d);
     }
 
+    // CR: there should be no methods that are needed for tests only
     public void setPacmanCoords(int x, int y, Direction d){
         pacman.setCoords(x, y, d);
     }
 
+    // CR: there should be no methods that are needed for tests only
     public void setGhostsCoords(int x, int y, int i){
         ghosts[i].setCoords(x, y);
     }

@@ -7,6 +7,7 @@ import com.github.kihoii.utils.ScoreUtils;
 import javax.swing.*;
 import java.awt.*;
 import java.io.*;
+import java.util.stream.*;
 
 public class ScorePanel extends JPanel {
 
@@ -52,16 +53,10 @@ public class ScorePanel extends JPanel {
     }
 
     public void setScores(Integer[] scores){
-        out.setText("<html><left>1. " + scores[0]
-                + "<br>2. " + scores[1]
-                + "<br>3. " + scores[2]
-                + "<br>4. " + scores[3]
-                + "<br>5. " + scores[4]
-                + "<br>6. " + scores[5]
-                + "<br>7. " + scores[6]
-                + "<br>8. " + scores[7]
-                + "<br>9. " + scores[8]
-                + "<br>10. " + scores[9] + "</left></html>");
+        String text = IntStream.range(0, 10)
+                .mapToObj(i -> String.format("<br>%d. %d", i + 1, scores[i]))
+                .collect(Collectors.joining("\n", "<html><left>", "</left></html>"));
+        out.setText(text);
     }
 
 

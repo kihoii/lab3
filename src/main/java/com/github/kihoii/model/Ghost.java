@@ -7,7 +7,9 @@ public class Ghost {
     private int x, y;
     private Direction dx, dy;
 
+    // CR: private
     public final int BLOCK_SIZE = 24;
+    // CR: private
     public final int N_BLOCKS = 15;
 
     public Ghost(){
@@ -74,6 +76,14 @@ public class Ghost {
 
                 // CR: what is 15?
                 // like none direction is clear
+                /*
+                CR:
+                private static boolean hasNoMoves(short block) {
+                   return MapBlock.UP_BORDER.is(block) && 
+                            MapBlock.R_BORDER.is(block) && MapBlock.L_BORDER.is(block) &&
+                            MapBlock.D_BORDER.is(block);
+                }
+                 */
                 if ((screenData[pos] & 15) == 15) {
                     dx = Direction.NONE;
                     dy = Direction.NONE;
@@ -96,6 +106,7 @@ public class Ghost {
             }
         }
 
+        // CR: const field
         int speed = 3;
         x += dx.get() * speed;
         y += dy.get() * speed;

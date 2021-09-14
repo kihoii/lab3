@@ -11,6 +11,10 @@ public enum Direction {
 
     Direction(int i) { k = i ;}
 
+    // CR: remove this method
+    // CR: add method 
+    // public int adjustSpeed(int speed) { return k * speed; }
+    // CR: rename k to coefficient
     public int get(){
         return k;
     }

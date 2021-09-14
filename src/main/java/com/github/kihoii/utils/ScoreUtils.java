@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Scanner;
 
+// CR: remove score utils class
 public class ScoreUtils {
 
     private static final File file = new File("src/main/resources/HighScores");
@@ -21,6 +22,7 @@ public class ScoreUtils {
         }
     }
 
+    // CR: move to upper level
     public static class ScoreFile {
 
         public static void getScores(){

@@ -21,6 +21,7 @@ public interface GameObject {
             return direction;
         }
 
+        // CR: make GameObject abstract class and move x, y related logic there
         public int getX(){
             return x;
         }
