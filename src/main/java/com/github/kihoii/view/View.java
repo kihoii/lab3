@@ -2,19 +2,15 @@ package com.github.kihoii.view;
 
 import com.github.kihoii.Main;
 import com.github.kihoii.controller.Controller;
-import com.github.kihoii.model.Model;
 import com.github.kihoii.utils.ScoreUtils;
-import com.github.kihoii.controller.States;
-import com.github.kihoii.utils.observer.FieldUpdate;
 import com.github.kihoii.view.panels.*;
 
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
+import java.util.List;
 
-public class View implements FieldUpdate {
-
-    private final Model model;
+public class View {
 
     private final Controller myListener;
 
@@ -28,8 +24,7 @@ public class View implements FieldUpdate {
 
     private final short[] map;
 
-    public View(Model model, Controller viewListener, short[] map)  {
-        this.model = model;
+    public View(Controller viewListener, short[] map)  {
         this.map = map;
 
         myListener = viewListener;
@@ -56,57 +51,63 @@ public class View implements FieldUpdate {
         mainWindow.setVisible(true);
     }
 
+    public void updateField(List<GameObject> field, int score, int lives){
+        gamePanel.updateField(field, score, lives);
+    }
 
+    public void startGame(List<GameObject> field){
+        mainWindow.remove(curPanel);
+        gamePanel = new GamePanel(myListener, field, map);
+        curPanel = gamePanel;
+        mainWindow.add(curPanel);
 
-    @Override
-    public void handleEvent(States state){
-        switch (state) {
-            case MENU -> {
-                mainWindow.remove(curPanel);
-                curPanel = menuPanel;
-                mainWindow.add(curPanel);
-                SwingUtilities.updateComponentTreeUI(mainWindow);
-            }
-            case START -> {
-                mainWindow.remove(curPanel);
-                gamePanel = new GamePanel(myListener, model.getPacman(), model.getGhosts(), map);
-                curPanel = gamePanel;
-                mainWindow.add(curPanel);
+        SwingUtilities.updateComponentTreeUI(mainWindow);
+    }
 
-                SwingUtilities.updateComponentTreeUI(mainWindow);
-            }
-            case IN_PROC ->
-                    gamePanel.updateField(model.getScreenData(), model.getPacman().getScore(),
-                            model.getPacman(), model.getGhosts());
-            case END -> {
+    public void openMenu(){
+        mainWindow.remove(curPanel);
+        curPanel = menuPanel;
+        mainWindow.add(curPanel);
+        SwingUtilities.updateComponentTreeUI(mainWindow);
+    }
 
-                ScoreUtils.scoreUpdate(model.getPacman().getScore());
-                Main.timer.stop();
-                mainWindow.remove(curPanel);
-                curPanel = new EndPanel(myListener, model.getPacman().getScore());
-                mainWindow.add(curPanel);
-                SwingUtilities.updateComponentTreeUI(mainWindow);
-            }
-            case PAUSE -> {
-                Main.timer.stop();
-                mainWindow.remove(curPanel);
-                curPanel = pausePanel;
-                mainWindow.add(curPanel);
-                SwingUtilities.updateComponentTreeUI(mainWindow);
-            } case CONTINUE -> {
-                mainWindow.remove(curPanel);
-                curPanel = gamePanel;
-                mainWindow.add(curPanel);
-                //model.setCurState(States.IN_PROC);
-                Main.timer.start();
-                SwingUtilities.updateComponentTreeUI(mainWindow);
-            } case SCORES -> {
-                mainWindow.remove(curPanel);
-                curPanel = scorePanel;
-                mainWindow.add(curPanel);
-                SwingUtilities.updateComponentTreeUI(mainWindow);
-            }
-        }
+    public void setPause(){
+        Main.timer.stop();
+        mainWindow.remove(curPanel);
+        curPanel = pausePanel;
+        mainWindow.add(curPanel);
+        SwingUtilities.updateComponentTreeUI(mainWindow);
+    }
+
+    public void endGame(int score){
+        ScoreUtils.addScore(score);
+        Main.timer.stop();
+        mainWindow.remove(curPanel);
+        curPanel = new EndPanel(myListener, score);
+        mainWindow.add(curPanel);
+        SwingUtilities.updateComponentTreeUI(mainWindow);
+    }
+
+    public void continueGame(){
+        mainWindow.remove(curPanel);
+        curPanel = gamePanel;
+        mainWindow.add(curPanel);
+        //model.setCurState(States.IN_PROC);
+        Main.timer.start();
+        SwingUtilities.updateComponentTreeUI(mainWindow);
+    }
+
+    public void showScores(){
+        mainWindow.remove(curPanel);
+        scorePanel.setScores(ScoreUtils.getScores());
+        curPanel = scorePanel;
+        mainWindow.add(curPanel);
+        SwingUtilities.updateComponentTreeUI(mainWindow);
+    }
+
+    public void exitGame(){
+        ScoreUtils.ScoreFile.saveScores();
+        System.exit(0);
     }
 
 }

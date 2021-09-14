@@ -1,10 +1,18 @@
 package com.github.kihoii.model;
 
+import com.github.kihoii.utils.MapBlock;
+import com.github.kihoii.view.GameObject;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class Model {
 
     public final int WIDTH = 15;
     public final int HEIGHT = 17;
     public final int BLOCK_SIZE = 24;
+    public final int SCREEN_X = WIDTH * BLOCK_SIZE;
+    public final int SCREEN_Y = HEIGHT * BLOCK_SIZE;
 
     private final int n_DOTS = 159;
     public final int TOTAL_SCORE = n_DOTS * 10;
@@ -21,9 +29,12 @@ public class Model {
         this.map = map;
     }
 
+    List<GameObject> objectField;
+
     public void initNewModel()  {
         initData();
         initGame();
+        makeField();
     }
 
     private void initData(){
@@ -55,9 +66,14 @@ public class Model {
         }
     }
 
-    public boolean movePacman() {
-        moveGhosts();
+    public void movePacman(){
         screenData = pacman.move(screenData, ghosts);
+    }
+
+    public boolean move() {
+
+        moveGhosts();
+        movePacman();
 
         if(!pacman.getAlive()){
             return false;
@@ -66,21 +82,52 @@ public class Model {
         if (pacman.getScore() % TOTAL_SCORE == 0){
             initGame();
         }
-
+        makeField();
         return true;
     }
 
-    public short[] getScreenData() {
-        return screenData;
+    private void makeField(){
+        objectField = new ArrayList<>();
+
+        int i = 0;
+        for(int y = 0; y < SCREEN_Y; y += BLOCK_SIZE) {
+            for (int x = 0; x < SCREEN_X; x += BLOCK_SIZE) {
+                if (!(MapBlock.DOT.is(screenData[i]))) {
+                    objectField.add(new GameObject.Point(x, y));
+                }
+                i++;
+            }
+        }
+
+        objectField.add(new GameObject.Pacman(pacman.getDirection(), pacman.getX(), pacman.getY()));
+
+        for(int k = 0; k < 4; k++){
+            objectField.add(new GameObject.Ghost(ghosts[k].getX(), ghosts[k].getY()));
+        }
     }
 
-    public Pacman getPacman(){
-        return pacman;
+    public List<GameObject> getField(){
+        return objectField;
     }
 
-    public Ghost[] getGhosts(){
-        return ghosts;
+    public int getLives(){
+        return pacman.getLives();
     }
 
+    public int getScore(){
+        return pacman.getScore();
+    }
+
+    public void setDirection(Direction d){
+        pacman.setDirection(d);
+    }
+
+    public void setPacmanCoords(int x, int y, Direction d){
+        pacman.setCoords(x, y, d);
+    }
+
+    public void setGhostsCoords(int x, int y, int i){
+        ghosts[i].setCoords(x, y);
+    }
 
 }

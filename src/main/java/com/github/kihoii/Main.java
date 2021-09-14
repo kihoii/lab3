@@ -20,7 +20,18 @@ public class Main {
     public static Timer timer;
 
     public static void main(String[] args) {
+        short[] map = getMap();
 
+        Model model = new Model(map);
+        controller = new Controller(model);
+        View view = new View(controller, map);
+        controller.addObserver(view);
+
+        int TIMER_DELAY = 40;
+        timer = new Timer(TIMER_DELAY, e -> controller.handleTimerRequest());
+    }
+
+    private static short[] getMap(){
         short[] map = new short[WIDTH * HEIGHT];
         try {
             Scanner scan = new Scanner(file);
@@ -31,14 +42,7 @@ public class Main {
         } catch (IOException e){
             System.err.println(e.getMessage());
         }
-
-        Model model = new Model(map);
-        controller = new Controller(model);
-        View view = new View(model, controller, map);
-        controller.addObserver(view);
-
-        int TIMER_DELAY = 40;
-        timer = new Timer(TIMER_DELAY, e -> controller.handleTimerRequest());
+        return map;
     }
 
 }

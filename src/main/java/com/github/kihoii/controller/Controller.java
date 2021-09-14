@@ -2,8 +2,8 @@ package com.github.kihoii.controller;
 
 import com.github.kihoii.Main;
 import com.github.kihoii.model.*;
-import com.github.kihoii.utils.observer.FieldUpdate;
-import com.github.kihoii.utils.observer.Observable;
+import com.github.kihoii.utils.Observable;
+import com.github.kihoii.view.View;
 
 import java.awt.event.*;
 
@@ -11,7 +11,7 @@ public class Controller extends KeyAdapter implements ViewListener, Observable {
 
     private final Model model;
 
-    private FieldUpdate fieldUpdate;
+    private View fieldUpdate;
 
     public Controller(Model model) {
         this.model = model;
@@ -20,27 +20,26 @@ public class Controller extends KeyAdapter implements ViewListener, Observable {
     public void keyPressed(KeyEvent e) {
         switch (e.getKeyCode()) {
             case KeyEvent.VK_DOWN ->
-                model.getPacman().setDirection(Direction.DOWN);
+                model.setDirection(Direction.DOWN);
 
             case KeyEvent.VK_LEFT ->
-                model.getPacman().setDirection(Direction.LEFT);
+                model.setDirection(Direction.LEFT);
 
             case KeyEvent.VK_RIGHT ->
-                model.getPacman().setDirection(Direction.RIGHT);
+                model.setDirection(Direction.RIGHT);
 
             case KeyEvent.VK_UP ->
-                model.getPacman().setDirection(Direction.UP);
+                model.setDirection(Direction.UP);
 
         }
         move();
     }
 
     private void move(){
-        if(model.movePacman()){
-            notifyObservers(States.IN_PROC);
+        if(model.move()){
+            fieldUpdate.updateField(model.getField(), model.getScore(), model.getLives());
         } else {
-            System.out.println("not alive");
-            notifyObservers(States.END);
+            fieldUpdate.endGame(model.getScore());
         }
     }
 
@@ -51,26 +50,22 @@ public class Controller extends KeyAdapter implements ViewListener, Observable {
     @Override
     public void onAction(ActionType actionType){
         switch (actionType) {
-            case EXIT -> System.exit(0);
+            case EXIT -> fieldUpdate.exitGame();
             case START -> {
                 model.initNewModel();
-                notifyObservers(States.START);
+                fieldUpdate.startGame(model.getField());
                 Main.timer.start();
             }
-            case SCORE -> notifyObservers(States.SCORES);
-            case MENU -> notifyObservers(States.MENU);
-            case RESUME -> notifyObservers(States.CONTINUE);
-            case PAUSE -> notifyObservers(States.PAUSE);
+            case SCORE -> fieldUpdate.showScores();
+            case MENU -> fieldUpdate.openMenu();
+            case RESUME -> fieldUpdate.continueGame();
+            case PAUSE -> fieldUpdate.setPause();
         }
     }
 
     @Override
-    public void addObserver(FieldUpdate fieldUpdate) {
+    public void addObserver(View fieldUpdate) {
         this.fieldUpdate = fieldUpdate;
     }
 
-    @Override
-    public void notifyObservers(States state) {
-        fieldUpdate.handleEvent(state);
-    }
 }

@@ -21,9 +21,10 @@ public class ModelTests {
         }
         Model model = new Model(map);
         model.initNewModel();
-        model.getPacman().setCoords(165, 144, Direction.NONE);
+        model.setPacmanCoords(7*24, 6*24, Direction.NONE);
+
         model.moveGhosts();
-        Assert.assertFalse(model.getPacman().getAlive());
+        Assert.assertTrue(model.getLives() > 0);
     }
 
     @Test
@@ -39,19 +40,19 @@ public class ModelTests {
         Model model = new Model(map);
         model.initNewModel();
 
-        model.getPacman().setCoords(11, 14, Direction.NONE);
-        model.getGhosts()[1].setCoords(11,14);
-        model.moveGhosts();
+        model.setPacmanCoords(11, 14, Direction.NONE);
+        model.setGhostsCoords(11, 14, 1);
+        model.movePacman();
 
-        model.getPacman().setCoords(11, 14, Direction.NONE);
-        model.getGhosts()[1].setCoords(11,14);
-        model.moveGhosts();
+        model.setPacmanCoords(11, 14, Direction.NONE);
+        model.setGhostsCoords(11, 14, 1);
+        model.movePacman();
 
-        model.getPacman().setCoords(11, 14, Direction.NONE);
-        model.getGhosts()[1].setCoords(11,14);
-        model.moveGhosts();
+        model.setPacmanCoords(11, 14, Direction.NONE);
+        model.setGhostsCoords(11, 14, 1);
+        model.movePacman();
 
-        Assert.assertEquals(0, model.getPacman().getLives());
+        Assert.assertEquals(0, model.getLives());
     }
 
 }
