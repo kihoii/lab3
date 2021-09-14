@@ -1,27 +1,16 @@
 package com.github.kihoii.utils;
 
-import java.io.*;
-import java.util.Arrays;
-import java.util.Collections;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Scanner;
 
-public class ScoreUtils {
+public class ScoreFile {
 
     private static final File file = new File("src/main/resources/HighScores");
-    private static Integer[] scores = new Integer[10];
 
     public static Integer[] getScores(){
-        return scores;
-    }
-
-    public static void addScore(int score){
-        if(score >= scores[9]) {
-            scores[9] = score;
-            Arrays.sort(scores, Collections.reverseOrder());
-        }
-    }
-
-    public static void getFileScores(){
+        Integer[] scores = new Integer[10];
         try {
             Scanner scanner = new Scanner(file);
             scanner.useDelimiter("\n");
@@ -36,9 +25,10 @@ public class ScoreUtils {
                 scores[i] = 0;
             }
         }
+        return scores;
     }
 
-    public static void saveFileScores(){
+    public static void saveScores(Integer[] scores){
         StringBuilder total = new StringBuilder();
 
         for(int i = 0; i < 10; i++){
@@ -53,6 +43,5 @@ public class ScoreUtils {
             System.err.println(e.getMessage());
         }
     }
-
 
 }

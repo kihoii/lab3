@@ -2,7 +2,7 @@ package com.github.kihoii.view;
 
 import com.github.kihoii.Main;
 import com.github.kihoii.controller.Controller;
-import com.github.kihoii.utils.ScoreUtils;
+import com.github.kihoii.utils.ScoreFile;
 import com.github.kihoii.view.panels.*;
 
 import javax.swing.*;
@@ -80,7 +80,7 @@ public class View {
     }
 
     public void endGame(int score){
-        ScoreUtils.addScore(score);
+        scorePanel.updateScores(score);
         Main.timer.stop();
         mainWindow.remove(curPanel);
         curPanel = new EndPanel(myListener, score);
@@ -98,14 +98,14 @@ public class View {
 
     public void showScores(){
         mainWindow.remove(curPanel);
-        scorePanel.setScores(ScoreUtils.getScores());
+        //scorePanel.updateScores(ScoreUtils.getScores());
         curPanel = scorePanel;
         mainWindow.add(curPanel);
         SwingUtilities.updateComponentTreeUI(mainWindow);
     }
 
     public void exitGame(){
-        ScoreUtils.saveFileScores();
+        ScoreFile.saveScores(scorePanel.getScores());
         System.exit(0);
     }
 
