@@ -19,7 +19,7 @@ public class ScorePanel extends JPanel {
 
     public ScorePanel(ViewListener actionListener) throws IOException {
         myListener = actionListener;
-        ScoreUtils.ScoreFile.getScores();
+        ScoreUtils.getFileScores();
         createScorePanel();
     }
 

@@ -9,14 +9,13 @@ import java.util.List;
 
 public class GameObjectPainter implements GameObjectVisitor {
 
-    // CR: make fields private static 
-    public final Image down = new ImageIcon("pics/down.gif").getImage();
-    public final Image up = new ImageIcon("pics/up.gif").getImage();
-    public final Image left = new ImageIcon("pics/left.gif").getImage();
-    public final Image right = new ImageIcon("pics/right.gif").getImage();
-    public final Image pacmanIm = new ImageIcon("pics/pacman.png").getImage();
+    private static final Image down = new ImageIcon("pics/down.gif").getImage();
+    private static final Image up = new ImageIcon("pics/up.gif").getImage();
+    private static final Image left = new ImageIcon("pics/left.gif").getImage();
+    private static final Image right = new ImageIcon("pics/right.gif").getImage();
+    private static final Image pacmanIm = new ImageIcon("pics/pacman.png").getImage();
 
-    public final Image ghost = new ImageIcon("pics/ghost.gif").getImage();
+    private static final Image ghost = new ImageIcon("pics/ghost.gif").getImage();
 
     private final Graphics2D g2d;
     private final ImageObserver im;

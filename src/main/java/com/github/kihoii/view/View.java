@@ -92,7 +92,6 @@ public class View {
         mainWindow.remove(curPanel);
         curPanel = gamePanel;
         mainWindow.add(curPanel);
-        //model.setCurState(States.IN_PROC);
         Main.timer.start();
         SwingUtilities.updateComponentTreeUI(mainWindow);
     }
@@ -106,7 +105,7 @@ public class View {
     }
 
     public void exitGame(){
-        ScoreUtils.ScoreFile.saveScores();
+        ScoreUtils.saveFileScores();
         System.exit(0);
     }
 

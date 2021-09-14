@@ -8,24 +8,20 @@ import java.util.List;
 
 public class Model {
 
-    // CR: make fields static and private
-    public final int WIDTH = 15;
-    public final int HEIGHT = 17;
-    public final int BLOCK_SIZE = 24;
-    public final int SCREEN_X = WIDTH * BLOCK_SIZE;
-    public final int SCREEN_Y = HEIGHT * BLOCK_SIZE;
+    private final static int WIDTH = 15;
+    private final static int HEIGHT = 17;
+    private final static int BLOCK_SIZE = 24;
+    private final static int SCREEN_X = WIDTH * BLOCK_SIZE;
+    private final static int SCREEN_Y = HEIGHT * BLOCK_SIZE;
 
-    // CR: make field static
-    private final int n_DOTS = 159;
-    // CR: make field static
-    public final int TOTAL_SCORE = n_DOTS * 10;
+    private final static int n_DOTS = 159;
+    private final static int TOTAL_SCORE = n_DOTS * 10;
 
     private final short[] map;
 
     private Pacman pacman;
     private Ghost[] ghosts;
-    // CR: make field static
-    private final int numberOfGhosts = 4;
+    private final static int numberOfGhosts = 4;
 
     public short[] screenData;
 
@@ -33,38 +29,31 @@ public class Model {
         this.map = map;
     }
 
-    List<GameObject> objectField;
-
     public void initNewModel()  {
         initData();
         initGame();
-        makeField();
     }
 
     private void initData(){
-        // CR: pass coords as constructor parameters
         pacman = new Pacman();
         ghosts = new Ghost[numberOfGhosts];
-        for(int i = 0; i < numberOfGhosts; i++){
-            ghosts[i] = new Ghost();
-        }
 
         screenData = new short[HEIGHT * WIDTH];
+    }
+
+    private void initGhosts(){
+        ghosts[0] = new Ghost(7 * BLOCK_SIZE, 6 * BLOCK_SIZE);
+        ghosts[1] = new Ghost(6 * BLOCK_SIZE, 6 * BLOCK_SIZE);
+        ghosts[2] = new Ghost(7 * BLOCK_SIZE, 7 * BLOCK_SIZE);
+        ghosts[3] = new Ghost(8 * BLOCK_SIZE, 7 * BLOCK_SIZE);
     }
 
     private void initGame(){
         int size = WIDTH * HEIGHT;
         System.arraycopy(map, 0, screenData, 0, size);
-        initGhostsCoords();
+        initGhosts();
     }
 
-    private void initGhostsCoords(){
-        // CR: just pass this as constructor parameters
-        ghosts[0].setCoords(7 * BLOCK_SIZE, 6 * BLOCK_SIZE);
-        ghosts[1].setCoords(6 * BLOCK_SIZE, 7 * BLOCK_SIZE);
-        ghosts[2].setCoords(7 * BLOCK_SIZE, 7 * BLOCK_SIZE);
-        ghosts[3].setCoords(8 * BLOCK_SIZE, 7 * BLOCK_SIZE);
-    }
 
     public void moveGhosts(){
         for(int i = 0; i < numberOfGhosts; i++){
@@ -88,33 +77,34 @@ public class Model {
         if (pacman.getScore() % TOTAL_SCORE == 0){
             initGame();
         }
-        makeField();
         return true;
     }
 
-    private void makeField(){
-        objectField = new ArrayList<>();
+    public List<GameObject> getField(){
+        List<GameObject> objectField = new ArrayList<>();
 
         int i = 0;
         for(int y = 0; y < SCREEN_Y; y += BLOCK_SIZE) {
             for (int x = 0; x < SCREEN_X; x += BLOCK_SIZE) {
                 if (!(MapBlock.DOT.is(screenData[i]))) {
-                    objectField.add(new GameObject.Point(x, y));
+                    GameObject point = new GameObject.Point();
+                    point.setCoords(x, y);
+                    objectField.add(point);
                 }
                 i++;
             }
         }
 
-        objectField.add(new GameObject.Pacman(pacman.getDirection(), pacman.getX(), pacman.getY()));
+        GameObject pcmn = new GameObject.Pacman(pacman.getDirection());
+        pcmn.setCoords(pacman.getX(), pacman.getY());
+        objectField.add(pcmn);
 
         for(int k = 0; k < 4; k++){
-            objectField.add(new GameObject.Ghost(ghosts[k].getX(), ghosts[k].getY()));
+            GameObject ghst = new GameObject.Ghost();
+            ghst.setCoords(ghosts[k].getX(), ghosts[k].getY());
+            objectField.add(ghst);
         }
-    }
 
-    
-    // CR: move logic from make field here. also use local variable instead of 'objectField' field
-    public List<GameObject> getField(){
         return objectField;
     }
 
@@ -130,14 +120,14 @@ public class Model {
         pacman.setDirection(d);
     }
 
-    // CR: there should be no methods that are needed for tests only
-    public void setPacmanCoords(int x, int y, Direction d){
-        pacman.setCoords(x, y, d);
-    }
-
-    // CR: there should be no methods that are needed for tests only
-    public void setGhostsCoords(int x, int y, int i){
-        ghosts[i].setCoords(x, y);
-    }
+//    // CR: there should be no methods that are needed for tests only
+//    public void setPacmanCoords(int x, int y, Direction d){
+//        pacman.setCoords(x, y, d);
+//    }
+//
+//    // CR: there should be no methods that are needed for tests only
+//    public void setGhostsCoords(int x, int y, int i){
+//        ghosts[i].setCoords(x, y);
+//    }
 
 }

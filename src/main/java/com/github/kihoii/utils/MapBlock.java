@@ -1,8 +1,5 @@
 package com.github.kihoii.utils;
 
-// CR: please move to package where it is used
-//it is used in two packages
-// for drawing map and understanding an ability to move in current direction
 public enum MapBlock {
 
     /* 0 - barrier

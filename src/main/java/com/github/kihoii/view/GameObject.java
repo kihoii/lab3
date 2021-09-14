@@ -2,33 +2,36 @@ package com.github.kihoii.view;
 
 import com.github.kihoii.model.Direction;
 
-public interface GameObject {
+public abstract class GameObject {
 
+    private int x, y;
 
-    void accept(GameObjectVisitor visitor);
+    public void setCoords(int x, int y){
+        this.x = x;
+        this.y = y;
+    }
 
-    class Pacman implements GameObject {
+    public int getX(){
+        return x;
+    }
+
+    public int getY(){
+        return y;
+    }
+
+    void accept(GameObjectVisitor visitor) {}
+
+    public static class Pacman extends GameObject {
         private final Direction direction;
-        private final int x, y;
 
-        public Pacman(Direction direction, int x, int y) {
-            this.direction = direction;
-            this.x = x;
-            this.y = y;
+        public Pacman(Direction direction_) {
+            direction = direction_;
         }
 
         public Direction getDirection() {
             return direction;
         }
 
-        // CR: make GameObject abstract class and move x, y related logic there
-        public int getX(){
-            return x;
-        }
-
-        public int getY(){
-            return y;
-        }
 
         @Override
         public void accept(GameObjectVisitor visitor) {
@@ -37,22 +40,7 @@ public interface GameObject {
     }
 
 
-    class Ghost implements GameObject {
-
-        private final int x, y;
-
-        public Ghost(int x, int y){
-            this.x = x;
-            this.y = y;
-        }
-
-        public int getX(){
-            return x;
-        }
-
-        public int getY(){
-            return y;
-        }
+    public static class Ghost extends GameObject {
 
         @Override
         public void accept(GameObjectVisitor visitor) {
@@ -60,22 +48,7 @@ public interface GameObject {
         }
     }
 
-    class Point implements GameObject {
-
-        private final int x, y;
-
-        public Point(int x, int y){
-            this.x = x;
-            this.y = y;
-        }
-
-        public int getX(){
-            return x;
-        }
-
-        public int getY(){
-            return y;
-        }
+    public static class Point extends GameObject {
 
         @Override
         public void accept(GameObjectVisitor visitor) {

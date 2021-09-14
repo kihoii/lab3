@@ -10,11 +10,16 @@ public class Pacman {
 
     private int x = 7 * BLOCK_SIZE;
     private int y = 12 * BLOCK_SIZE;
-    private int dx;
-    private int dy;
+    private Direction dx;
+    private Direction dy;
     private Direction direction = Direction.NONE;
     private int lives = 3;
     private int score;
+
+    public Pacman(){
+        dx = Direction.NONE;
+        dy = Direction.NONE;
+    }
 
     public void setCoords(int x, int y, Direction direction){
         this.x = x;
@@ -51,13 +56,12 @@ public class Pacman {
     }
 
     public short[] move(short[] screenData, Ghost[] ghosts) {
-        int reqDx = 0;
-        int reqDy = 0;
+        Direction reqDx = Direction.NONE, reqDy = Direction.NONE;
         switch (direction) {
-            case UP -> reqDy = -1;
-            case DOWN -> reqDy = 1;
-            case RIGHT -> reqDx = 1;
-            case LEFT -> reqDx = -1;
+            case UP -> reqDy = Direction.UP;
+            case DOWN -> reqDy = Direction.DOWN;
+            case RIGHT -> reqDx = Direction.RIGHT;
+            case LEFT -> reqDx = Direction.LEFT;
         }
 
         if (x % BLOCK_SIZE == 0 && y % BLOCK_SIZE == 0) {
@@ -69,28 +73,28 @@ public class Pacman {
                 score += 10;
             }
 
-            if (reqDx != Direction.NONE.get() || reqDy != Direction.NONE.get()) {
-                if (isPossibleToMove(reqDx, reqDy, curBlock)) {
+            if (!reqDx.equals(Direction.NONE) || !reqDy.equals(Direction.NONE)) {
+                if (isPossibleToMove(reqDx.adjustSpeed(1), reqDy.adjustSpeed(1), curBlock)) {
                     dx = reqDx;
                     dy = reqDy;
 
                 } else {
-                    dx = Direction.NONE.get();
-                    dy = Direction.NONE.get();
+                    dx = Direction.NONE;
+                    dy = Direction.NONE;
                     return screenData;
                 }
 
             }
 
-            if (!isPossibleToMove(dx, dy, curBlock)) {
-                dx = Direction.NONE.get();
-                dy = Direction.NONE.get();
+            if (!isPossibleToMove(dx.adjustSpeed(1), dy.adjustSpeed(1), curBlock)) {
+                dx = Direction.NONE;
+                dy = Direction.NONE;
                 return screenData;
             }
 
         }
-        x += dx * PACMAN_SPEED;
-        y += dy * PACMAN_SPEED;
+        x += dx.adjustSpeed(PACMAN_SPEED);
+        y += dy.adjustSpeed(PACMAN_SPEED);
 
         boolean hit = false;
         for (int i = 0 ; i < 4; i++){
@@ -106,8 +110,8 @@ public class Pacman {
 
         if(hit && lives > 0){
             direction = Direction.NONE;
-            dx = 0;
-            dy = 0;
+            dx = Direction.NONE;
+            dy = Direction.NONE;
             x = 7 * BLOCK_SIZE;
             y = 12 * BLOCK_SIZE;
         }
