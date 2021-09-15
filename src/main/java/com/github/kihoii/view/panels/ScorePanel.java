@@ -11,6 +11,7 @@ import java.util.stream.*;
 public class ScorePanel extends JPanel {
 
 
+    // CR: pass score file instead, remove this field
     private Integer[] scores;
 
     private final JLabel label = new JLabel("<html><center>HIGH<br>SCORES</center></html>");

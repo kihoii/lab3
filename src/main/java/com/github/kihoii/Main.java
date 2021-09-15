@@ -13,8 +13,8 @@ public class Main {
 
     private static final File MAP_FILE = new File("src/main/resources/Map");
 
-    public static final int WIDTH = 15;
-    public static final int HEIGHT = 17;
+    private static final int WIDTH = 15;
+    private static final int HEIGHT = 17;
     private static final int TIMER_DELAY = 40;
 
     private static Controller controller;

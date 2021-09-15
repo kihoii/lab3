@@ -38,6 +38,8 @@ public class Ghost {
 
             count = 0;
 
+            // CR: add function in Direction boolean backwards() that returns true if we're going backwards
+            // CR: use it instead of dx != Direction.RIGHT
             if (!(MapBlock.L_BORDER.is(screenData[pos]))
                     && dx != Direction.RIGHT) {
                 dxCount[count] = Direction.LEFT;

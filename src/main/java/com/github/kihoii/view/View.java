@@ -1,7 +1,7 @@
 package com.github.kihoii.view;
 
 import com.github.kihoii.Main;
-import com.github.kihoii.controller.Controller;
+import com.github.kihoii.controller.*;
 import com.github.kihoii.utils.ScoreFile;
 import com.github.kihoii.view.panels.*;
 
@@ -12,7 +12,7 @@ import java.util.List;
 
 public class View {
 
-    private final Controller myListener;
+    private final ViewListener myListener;
 
     private final JFrame mainWindow;
     private final MenuPanel menuPanel;
@@ -20,14 +20,13 @@ public class View {
     private final PausePanel pausePanel;
     private ScorePanel scorePanel;
 
-    private ScoreFile scoreFile;
+    private final ScoreFile scoreFile = new ScoreFile();
 
     private JPanel curPanel;
 
     private final short[] map;
 
     public View(Controller viewListener, short[] map)  {
-        scoreFile = new ScoreFile();
 
         this.map = map;
 
@@ -110,7 +109,6 @@ public class View {
     }
 
     public void exitGame(){
-        //ScoreFile.saveScores(scorePanel.getScores());
         System.exit(0);
     }
 

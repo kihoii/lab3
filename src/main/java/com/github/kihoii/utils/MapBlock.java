@@ -19,8 +19,8 @@ public enum MapBlock {
 
     private final short blockType;
 
-    MapBlock(short i) {
-        blockType = i;
+    MapBlock(short blockType) {
+        this.blockType = blockType;
     }
 
     public boolean is(short block){

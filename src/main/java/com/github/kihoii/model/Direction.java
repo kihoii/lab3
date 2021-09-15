@@ -9,7 +9,7 @@ public enum Direction {
 
     private final int coefficient;
 
-    Direction(int i) { coefficient = i ;}
+    Direction(int coefficient) { this.coefficient = coefficient ;}
 
     public int adjustSpeed(int speed){
         return coefficient * speed;

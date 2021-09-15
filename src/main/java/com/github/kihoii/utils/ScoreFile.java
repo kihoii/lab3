@@ -9,21 +9,24 @@ import java.util.Scanner;
 
 public class ScoreFile {
 
-    private static final File file = new File("src/main/resources/HighScores");
+    private static final File SCORES_FILE = new File("src/main/resources/HighScores");
 
-    private Integer[] scores = new Integer[10];
+    private Integer[] scores = null;
 
 
     public Integer[] getScores(){
         if (scores == null) {
+            scores = new Integer[10];
             try {
-                Scanner scanner = new Scanner(file);
+                Scanner scanner = new Scanner(SCORES_FILE);
+                // CR: use Scanner#nextLine instead
                 scanner.useDelimiter("\n");
                 int i = 0;
                 while (scanner.hasNext()) {
                     scores[i] = scanner.nextInt();
                     i++;
                 }
+                // CR: use try catch with resources
                 scanner.close();
             } catch (IOException e) {
                 for (int i = 0; i < 10; i++) {
@@ -50,7 +53,7 @@ public class ScoreFile {
         }
 
         try {
-            FileWriter fw = new FileWriter(file);
+            FileWriter fw = new FileWriter(SCORES_FILE);
             fw.write(total.toString());
             fw.close();
         } catch (IOException e){

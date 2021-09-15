@@ -8,6 +8,7 @@ import java.awt.image.ImageObserver;
 
 public class GameObjectPainter implements GameObjectVisitor {
 
+    // CR: by naming i meant that constants should look like PACMAN_DOWN, PACKMAN_UP and so on
     private static final Image pacmanDown = new ImageIcon("pics/down.gif").getImage();
     private static final Image pacmanUp = new ImageIcon("pics/up.gif").getImage();
     private static final Image pacmanLeft = new ImageIcon("pics/left.gif").getImage();
