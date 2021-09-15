@@ -38,31 +38,29 @@ public class Ghost {
 
             count = 0;
 
-            // CR: add function in Direction boolean backwards() that returns true if we're going backwards
-            // CR: use it instead of dx != Direction.RIGHT
             if (!(MapBlock.L_BORDER.is(screenData[pos]))
-                    && dx != Direction.RIGHT) {
+                    && dx.backwards(Direction.RIGHT)) {
                 dxCount[count] = Direction.LEFT;
                 dyCount[count] = Direction.NONE;
                 count++;
             }
 
             if (!(MapBlock.UP_BORDER.is(screenData[pos]))
-                    && dy != Direction.DOWN) {
+                    && dy.backwards(Direction.DOWN)) {
                 dxCount[count] = Direction.NONE;
                 dyCount[count] = Direction.UP;
                 count++;
             }
 
             if (!(MapBlock.R_BORDER.is(screenData[pos]))
-                    && dx != Direction.LEFT) {
+                    && dx.backwards(Direction.LEFT)) {
                 dxCount[count] = Direction.RIGHT;
                 dyCount[count] = Direction.NONE;
                 count++;
             }
 
             if (!(MapBlock.D_BORDER.is(screenData[pos]))
-                    && dy != Direction.UP) {
+                    && dy.backwards(Direction.UP)) {
                 dxCount[count] = Direction.NONE;
                 dyCount[count] = Direction.DOWN;
                 count++;

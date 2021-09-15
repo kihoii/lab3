@@ -8,12 +8,11 @@ import java.awt.image.ImageObserver;
 
 public class GameObjectPainter implements GameObjectVisitor {
 
-    // CR: by naming i meant that constants should look like PACMAN_DOWN, PACKMAN_UP and so on
-    private static final Image pacmanDown = new ImageIcon("pics/down.gif").getImage();
-    private static final Image pacmanUp = new ImageIcon("pics/up.gif").getImage();
-    private static final Image pacmanLeft = new ImageIcon("pics/left.gif").getImage();
-    private static final Image pacmanRight = new ImageIcon("pics/right.gif").getImage();
-    private static final Image pacmanNone = new ImageIcon("pics/pacman.png").getImage();
+    private static final Image PACMAN_DOWN = new ImageIcon("pics/down.gif").getImage();
+    private static final Image PACMAN_UP = new ImageIcon("pics/up.gif").getImage();
+    private static final Image PACMAN_LEFT = new ImageIcon("pics/left.gif").getImage();
+    private static final Image PACMAN_RIGHT = new ImageIcon("pics/right.gif").getImage();
+    private static final Image PACMAN_NONE = new ImageIcon("pics/pacman.png").getImage();
 
     private static final Image ghost = new ImageIcon("pics/ghost.gif").getImage();
 
@@ -32,15 +31,15 @@ public class GameObjectPainter implements GameObjectVisitor {
 
     private void paintPacman(int x, int y, Direction d){
         if (d.equals(Direction.LEFT)) {
-            g2d.drawImage(pacmanLeft, x + 1, y + 1, im);
+            g2d.drawImage(PACMAN_LEFT, x + 1, y + 1, im);
         } else if (d.equals(Direction.RIGHT)) {
-            g2d.drawImage(pacmanRight,x + 1, y + 1, im);
+            g2d.drawImage(PACMAN_RIGHT,x + 1, y + 1, im);
         } else if (d.equals(Direction.UP)) {
-            g2d.drawImage(pacmanUp, x + 1, y + 1, im);
+            g2d.drawImage(PACMAN_UP, x + 1, y + 1, im);
         } else if (d.equals(Direction.DOWN)){
-            g2d.drawImage(pacmanDown, x + 1, y + 1, im);
+            g2d.drawImage(PACMAN_DOWN, x + 1, y + 1, im);
         } else {
-            g2d.drawImage(pacmanNone, x + 1, y + 1, im);
+            g2d.drawImage(PACMAN_NONE, x + 1, y + 1, im);
         }
     }
 

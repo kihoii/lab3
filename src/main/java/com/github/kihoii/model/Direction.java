@@ -1,11 +1,31 @@
 package com.github.kihoii.model;
 
 public enum Direction {
-    UP(-1),
-    DOWN(1),
-    RIGHT(1),
-    LEFT(-1),
-    NONE(0);
+    UP(-1){
+        public boolean backwards(Direction d){
+            return d == DOWN;
+        }
+    },
+    DOWN(1){
+        public boolean backwards(Direction d){
+            return d == UP;
+        }
+    },
+    RIGHT(1){
+        public boolean backwards(Direction d){
+            return d == LEFT;
+        }
+    },
+    LEFT(-1){
+        public boolean backwards(Direction d){
+            return d == RIGHT;
+        }
+    },
+    NONE(0){
+        public boolean backwards(Direction d){
+            return false;
+        }
+    };
 
     private final int coefficient;
 
@@ -14,4 +34,8 @@ public enum Direction {
     public int adjustSpeed(int speed){
         return coefficient * speed;
     }
+
+    abstract boolean backwards(Direction d);
+
+
 }

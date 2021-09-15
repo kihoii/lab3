@@ -17,17 +17,12 @@ public class ScoreFile {
     public Integer[] getScores(){
         if (scores == null) {
             scores = new Integer[10];
-            try {
-                Scanner scanner = new Scanner(SCORES_FILE);
-                // CR: use Scanner#nextLine instead
-                scanner.useDelimiter("\n");
+            try (Scanner scanner = new Scanner(SCORES_FILE)) {
                 int i = 0;
                 while (scanner.hasNext()) {
-                    scores[i] = scanner.nextInt();
+                    scores[i] = Integer.parseInt(scanner.nextLine());
                     i++;
                 }
-                // CR: use try catch with resources
-                scanner.close();
             } catch (IOException e) {
                 for (int i = 0; i < 10; i++) {
                     scores[i] = 0;

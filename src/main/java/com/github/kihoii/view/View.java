@@ -20,7 +20,7 @@ public class View {
     private final PausePanel pausePanel;
     private ScorePanel scorePanel;
 
-    private final ScoreFile scoreFile = new ScoreFile();
+    //private final ScoreFile scoreFile = new ScoreFile();
 
     private JPanel curPanel;
 
@@ -35,7 +35,7 @@ public class View {
         menuPanel = new MenuPanel(myListener);
         pausePanel = new PausePanel(myListener);
         try{
-            scorePanel = new ScorePanel(viewListener, scoreFile.getScores());
+            scorePanel = new ScorePanel(viewListener/*,scoreFile.getScores()*/);
         } catch (IOException e){
             System.out.println(e.getMessage());
         }
@@ -83,8 +83,7 @@ public class View {
     }
 
     public void endGame(int score){
-        scoreFile.addScore(score);
-        scorePanel.update(scoreFile.getScores());
+        scorePanel.update(score);
         Main.timer.stop();
         mainWindow.remove(curPanel);
         curPanel = new EndPanel(myListener, score);

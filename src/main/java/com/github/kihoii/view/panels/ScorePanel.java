@@ -2,6 +2,7 @@ package com.github.kihoii.view.panels;
 
 import com.github.kihoii.controller.ActionType;
 import com.github.kihoii.controller.ViewListener;
+import com.github.kihoii.utils.ScoreFile;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,9 +11,7 @@ import java.util.stream.*;
 
 public class ScorePanel extends JPanel {
 
-
-    // CR: pass score file instead, remove this field
-    private Integer[] scores;
+    private ScoreFile scoreFile;
 
     private final JLabel label = new JLabel("<html><center>HIGH<br>SCORES</center></html>");
     private final JLabel out = new JLabel();
@@ -20,15 +19,17 @@ public class ScorePanel extends JPanel {
     private final Font menuFNT = new Font("arial", Font.BOLD, 50);
     private final Font smallFNT = new Font("arial", Font.BOLD, 20);
 
-    public ScorePanel(ViewListener actionListener, Integer[] scores) throws IOException {
+    public ScorePanel(ViewListener actionListener) throws IOException {
+        scoreFile = new ScoreFile();
+
         myListener = actionListener;
-        this.scores = scores;
         createScorePanel();
     }
 
     private final ViewListener myListener;
 
     private void createScorePanel() {
+
         label.setFont(menuFNT);
         label.setForeground(Color.YELLOW);
         label.setBounds(70, 20, 300, 110);
@@ -55,15 +56,17 @@ public class ScorePanel extends JPanel {
         this.add(menuButton);
     }
 
-    public void setScores(){
+    private void setScores(){
+        Integer[] scores = scoreFile.getScores();
+
         String text = IntStream.range(0, 10)
                 .mapToObj(i -> String.format("<br>%d. %d", i + 1, scores[i]))
                 .collect(Collectors.joining("\n", "<html><left>", "</left></html>"));
         out.setText(text);
     }
 
-    public void update(Integer[] scores){
-        this.scores = scores;
+    public void update(int score){
+        scoreFile.addScore(score);
         setScores();
     }
 
