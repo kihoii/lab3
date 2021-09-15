@@ -5,37 +5,23 @@ import com.github.kihoii.model.Direction;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.ImageObserver;
-import java.util.List;
 
 public class GameObjectPainter implements GameObjectVisitor {
 
-    // CR: naming
-    private static final Image down = new ImageIcon("pics/down.gif").getImage();
-    private static final Image up = new ImageIcon("pics/up.gif").getImage();
-    private static final Image left = new ImageIcon("pics/left.gif").getImage();
-    private static final Image right = new ImageIcon("pics/right.gif").getImage();
-    private static final Image pacmanIm = new ImageIcon("pics/pacman.png").getImage();
+    private static final Image pacmanDown = new ImageIcon("pics/down.gif").getImage();
+    private static final Image pacmanUp = new ImageIcon("pics/up.gif").getImage();
+    private static final Image pacmanLeft = new ImageIcon("pics/left.gif").getImage();
+    private static final Image pacmanRight = new ImageIcon("pics/right.gif").getImage();
+    private static final Image pacmanNone = new ImageIcon("pics/pacman.png").getImage();
 
     private static final Image ghost = new ImageIcon("pics/ghost.gif").getImage();
 
     private final Graphics2D g2d;
     private final ImageObserver im;
 
-    public GameObjectPainter(Graphics2D g2d, List<GameObject> field, ImageObserver im) {
+    public GameObjectPainter(Graphics2D g2d, ImageObserver im) {
         this.g2d = g2d;
         this.im = im;
-
-        // CR: do it in separate method
-        /*
-        CR: 
-        static void paint(Graphics2D g2d, List<GameObject> field, ImageObserver im) {
-          GameObjectPainter painter = ...;
-          field.forEach(go -> go.accept(this));
-        }
-         */
-        for (GameObject gameObject : field) {
-            gameObject.accept(this);
-        }
     }
 
     @Override
@@ -45,15 +31,15 @@ public class GameObjectPainter implements GameObjectVisitor {
 
     private void paintPacman(int x, int y, Direction d){
         if (d.equals(Direction.LEFT)) {
-            g2d.drawImage(left, x + 1, y + 1, im);
+            g2d.drawImage(pacmanLeft, x + 1, y + 1, im);
         } else if (d.equals(Direction.RIGHT)) {
-            g2d.drawImage(right,x + 1, y + 1, im);
+            g2d.drawImage(pacmanRight,x + 1, y + 1, im);
         } else if (d.equals(Direction.UP)) {
-            g2d.drawImage(up, x + 1, y + 1, im);
+            g2d.drawImage(pacmanUp, x + 1, y + 1, im);
         } else if (d.equals(Direction.DOWN)){
-            g2d.drawImage(down, x + 1, y + 1, im);
+            g2d.drawImage(pacmanDown, x + 1, y + 1, im);
         } else {
-            g2d.drawImage(pacmanIm, x + 1, y + 1, im);
+            g2d.drawImage(pacmanNone, x + 1, y + 1, im);
         }
     }
 

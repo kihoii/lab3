@@ -20,11 +20,15 @@ public class View {
     private final PausePanel pausePanel;
     private ScorePanel scorePanel;
 
+    private ScoreFile scoreFile;
+
     private JPanel curPanel;
 
     private final short[] map;
 
     public View(Controller viewListener, short[] map)  {
+        scoreFile = new ScoreFile();
+
         this.map = map;
 
         myListener = viewListener;
@@ -32,7 +36,7 @@ public class View {
         menuPanel = new MenuPanel(myListener);
         pausePanel = new PausePanel(myListener);
         try{
-            scorePanel = new ScorePanel(viewListener);
+            scorePanel = new ScorePanel(viewListener, scoreFile.getScores());
         } catch (IOException e){
             System.out.println(e.getMessage());
         }
@@ -55,9 +59,9 @@ public class View {
         gamePanel.updateField(field, score, lives);
     }
 
-    public void startGame(List<GameObject> field){
+    public void startGame(List<GameObject> field, int score, int lives){
         mainWindow.remove(curPanel);
-        gamePanel = new GamePanel(myListener, field, map);
+        gamePanel = new GamePanel(myListener, field, map, score, lives);
         curPanel = gamePanel;
         mainWindow.add(curPanel);
 
@@ -80,7 +84,8 @@ public class View {
     }
 
     public void endGame(int score){
-        scorePanel.updateScores(score);
+        scoreFile.addScore(score);
+        scorePanel.update(scoreFile.getScores());
         Main.timer.stop();
         mainWindow.remove(curPanel);
         curPanel = new EndPanel(myListener, score);
@@ -105,7 +110,7 @@ public class View {
     }
 
     public void exitGame(){
-        ScoreFile.saveScores(scorePanel.getScores());
+        //ScoreFile.saveScores(scorePanel.getScores());
         System.exit(0);
     }
 

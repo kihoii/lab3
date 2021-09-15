@@ -24,6 +24,6 @@ public enum MapBlock {
     }
 
     public boolean is(short block){
-        return ((blockType & block) == 0);
+        return ((blockType & block) != 0);
     }
 }

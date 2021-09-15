@@ -12,14 +12,13 @@ import java.util.List;
 
 public class GamePanel extends JPanel {
 
-    // CR: private static final fields 
-    public final int WIDTH = 15;
-    public final int HEIGHT = 17;
-    public final int BLOCK_SIZE = 24;
-    public final int SCREEN_X = WIDTH * BLOCK_SIZE;
-    public final int SCREEN_Y = HEIGHT * BLOCK_SIZE;
+    private static final int WIDTH = 15;
+    private static final int HEIGHT = 17;
+    private static final int BLOCK_SIZE = 24;
+    private static final int SCREEN_X = WIDTH * BLOCK_SIZE;
+    private static final int SCREEN_Y = HEIGHT * BLOCK_SIZE;
 
-    public final Image heart = new ImageIcon("pics/heart.png").getImage();
+    private final Image heart = new ImageIcon("pics/heart.png").getImage();
 
     private final Font scoreFNT = new Font("arial", Font.BOLD, 15);
     private int score;
@@ -29,15 +28,13 @@ public class GamePanel extends JPanel {
     private final short[] map;
     private List<GameObject> field;
 
-    public GamePanel(ViewListener myListener, List<GameObject> field, short[] map) {
+    public GamePanel(ViewListener myListener, List<GameObject> field, short[] map, int score, int lives) {
         this.map = map;
         this.field = field;
         this.setPreferredSize(new Dimension(376,500));
 
-        // CR: should get this info from controller (that gets this info from model)
-        score = 0;
-        // CR: should get this info from controller (that gets this info from model)
-        lives = 3;
+        this.score = score;
+        this.lives = lives;
 
         JButton pauseButton = new JButton("PAUSE");
         pauseButton.setFont(scoreFNT);
@@ -68,7 +65,8 @@ public class GamePanel extends JPanel {
         g2d.fillRect(0, 0, 376, 500);
 
         paintMap(g2d);
-        new GameObjectPainter(g2d, field, this);
+        GameObjectPainter painter = new GameObjectPainter(g2d, this);
+        field.forEach(GameObject -> GameObject.accept(painter));
 
         for(int i = 0; i < lives; i++){
             g2d.drawImage(heart, 330 - 30*i, 413, this);
@@ -91,25 +89,25 @@ public class GamePanel extends JPanel {
                     g2d.fillRect(x, y, BLOCK_SIZE, BLOCK_SIZE);
                 }
 
-                if (!(MapBlock.L_BORDER.is(map[i]))) {
+                if ((MapBlock.L_BORDER.is(map[i]))) {
                     g2d.drawLine(x, y, x, y + BLOCK_SIZE - 1);
                 }
 
-                if (!(MapBlock.UP_BORDER.is(map[i]))) {
+                if ((MapBlock.UP_BORDER.is(map[i]))) {
                     g2d.drawLine(x, y, x + BLOCK_SIZE - 1, y);
                 }
 
-                if (!(MapBlock.R_BORDER.is(map[i]))) {
+                if ((MapBlock.R_BORDER.is(map[i]))) {
                     g2d.drawLine(x + BLOCK_SIZE - 1, y, x + BLOCK_SIZE - 1,
                             y + BLOCK_SIZE - 1);
                 }
 
-                if (!(MapBlock.D_BORDER.is(map[i]))) {
+                if ((MapBlock.D_BORDER.is(map[i]))) {
                     g2d.drawLine(x, y + BLOCK_SIZE - 1, x + BLOCK_SIZE - 1,
                             y + BLOCK_SIZE - 1);
                 }
 
-                if (!(MapBlock.G_HOUSE.is(map[i]))) {
+                if ((MapBlock.G_HOUSE.is(map[i]))) {
                     g2d.setColor(new Color(121, 121, 121));
                     g2d.drawLine(x, y, x + BLOCK_SIZE - 1, y);
                 }

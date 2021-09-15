@@ -62,13 +62,13 @@ public class Pacman {
             int pos = x / Model.BLOCK_SIZE + N_BLOCKS * (y / Model.BLOCK_SIZE);
             short curBlock = screenData[pos];
 
-            if (!MapBlock.DOT.is(curBlock)) {
+            if (MapBlock.DOT.is(curBlock)) {
                 screenData[pos] = (short) (curBlock & 15);
                 score += 10;
             }
 
             if (reqDx != Direction.NONE || reqDy != Direction.NONE) {
-                if (isPossibleToMove(reqDx.adjustSpeed(1), reqDy.adjustSpeed(1), curBlock)) {
+                if (isPossibleToMove(reqDx, reqDy, curBlock)) {
                     dx = reqDx;
                     dy = reqDy;
 
@@ -80,7 +80,7 @@ public class Pacman {
 
             }
 
-            if (!isPossibleToMove(dx.adjustSpeed(1), dy.adjustSpeed(1), curBlock)) {
+            if (!isPossibleToMove(dx, dy, curBlock)) {
                 dx = Direction.NONE;
                 dy = Direction.NONE;
                 return screenData;
@@ -113,12 +113,11 @@ public class Pacman {
         return screenData;
     }
 
-    // CR: pass x and y as Direction
-    private static boolean isPossibleToMove(int x, int y, short curBlock){
-        return !((x == -1 && y == 0 && (!MapBlock.L_BORDER.is(curBlock)))
-                || (x == 1 && y == 0 && (!MapBlock.R_BORDER.is(curBlock)))
-                || (x == 0 && y == -1 && (!MapBlock.UP_BORDER.is(curBlock)))
-                || (x == 0 && y == 1 && (!MapBlock.D_BORDER.is(curBlock))));
+    private static boolean isPossibleToMove(Direction x, Direction y, short curBlock){
+        return !((x.equals(Direction.UP) && y.equals(Direction.NONE) && (MapBlock.L_BORDER.is(curBlock)))
+                || (x.equals(Direction.DOWN) && y.equals(Direction.NONE) && (MapBlock.R_BORDER.is(curBlock)))
+                || (x.equals(Direction.NONE) && y.equals(Direction.LEFT) && (MapBlock.UP_BORDER.is(curBlock)))
+                || (x.equals(Direction.NONE) && y.equals(Direction.RIGHT) && (MapBlock.D_BORDER.is(curBlock))));
     }
 
 }

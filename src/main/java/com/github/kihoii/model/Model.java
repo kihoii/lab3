@@ -85,23 +85,18 @@ public class Model {
         int i = 0;
         for(int y = 0; y < SCREEN_Y; y += BLOCK_SIZE) {
             for (int x = 0; x < SCREEN_X; x += BLOCK_SIZE) {
-                if (!(MapBlock.DOT.is(screenData[i]))) {
-                    GameObject point = new GameObject.Point();
-                    point.setCoords(x, y);
-                    objectField.add(point);
+                if ((MapBlock.DOT.is(screenData[i]))) {
+                    objectField.add(new GameObject.Point(x, y));
                 }
                 i++;
             }
         }
 
-        GameObject pcmn = new GameObject.Pacman(pacman.getDirection());
-        pcmn.setCoords(pacman.getX(), pacman.getY());
-        objectField.add(pcmn);
+
+        objectField.add(new GameObject.Pacman(pacman.getDirection(), pacman.getX(), pacman.getY()));
 
         for(int k = 0; k < 4; k++){
-            GameObject ghst = new GameObject.Ghost();
-            ghst.setCoords(ghosts[k].getX(), ghosts[k].getY());
-            objectField.add(ghst);
+            objectField.add(new GameObject.Ghost(ghosts[k].getX(), ghosts[k].getY()));
         }
 
         return objectField;
@@ -118,15 +113,5 @@ public class Model {
     public void setDirection(Direction d){
         pacman.setDirection(d);
     }
-
-//    // CR: there should be no methods that are needed for tests only
-//    public void setPacmanCoords(int x, int y, Direction d){
-//        pacman.setCoords(x, y, d);
-//    }
-//
-//    // CR: there should be no methods that are needed for tests only
-//    public void setGhostsCoords(int x, int y, int i){
-//        ghosts[i].setCoords(x, y);
-//    }
 
 }

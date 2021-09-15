@@ -48,7 +48,7 @@ public class Controller extends KeyAdapter implements ViewListener {
             case EXIT -> view.exitGame();
             case START -> {
                 model.initNewModel();
-                view.startGame(model.getField());
+                view.startGame(model.getField(), model.getScore(), model.getLives());
                 Main.timer.start();
             }
             case SCORE -> view.showScores();

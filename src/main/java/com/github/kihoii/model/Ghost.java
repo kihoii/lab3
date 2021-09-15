@@ -38,28 +38,28 @@ public class Ghost {
 
             count = 0;
 
-            if ((MapBlock.L_BORDER.is(screenData[pos]))
+            if (!(MapBlock.L_BORDER.is(screenData[pos]))
                     && dx != Direction.RIGHT) {
                 dxCount[count] = Direction.LEFT;
                 dyCount[count] = Direction.NONE;
                 count++;
             }
 
-            if ((MapBlock.UP_BORDER.is(screenData[pos]))
+            if (!(MapBlock.UP_BORDER.is(screenData[pos]))
                     && dy != Direction.DOWN) {
                 dxCount[count] = Direction.NONE;
                 dyCount[count] = Direction.UP;
                 count++;
             }
 
-            if ((MapBlock.R_BORDER.is(screenData[pos]))
+            if (!(MapBlock.R_BORDER.is(screenData[pos]))
                     && dx != Direction.LEFT) {
                 dxCount[count] = Direction.RIGHT;
                 dyCount[count] = Direction.NONE;
                 count++;
             }
 
-            if ((MapBlock.D_BORDER.is(screenData[pos]))
+            if (!(MapBlock.D_BORDER.is(screenData[pos]))
                     && dy != Direction.UP) {
                 dxCount[count] = Direction.NONE;
                 dyCount[count] = Direction.DOWN;

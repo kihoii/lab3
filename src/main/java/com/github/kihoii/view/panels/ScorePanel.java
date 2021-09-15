@@ -2,19 +2,16 @@ package com.github.kihoii.view.panels;
 
 import com.github.kihoii.controller.ActionType;
 import com.github.kihoii.controller.ViewListener;
-import com.github.kihoii.utils.ScoreFile;
 
 import javax.swing.*;
 import java.awt.*;
 import java.io.*;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.stream.*;
 
 public class ScorePanel extends JPanel {
 
-    // CR: this field should be a private final field inside ScoreFile (not static)
-    private static Integer[] scores = new Integer[10];
+
+    private Integer[] scores;
 
     private final JLabel label = new JLabel("<html><center>HIGH<br>SCORES</center></html>");
     private final JLabel out = new JLabel();
@@ -22,9 +19,9 @@ public class ScorePanel extends JPanel {
     private final Font menuFNT = new Font("arial", Font.BOLD, 50);
     private final Font smallFNT = new Font("arial", Font.BOLD, 20);
 
-    public ScorePanel(ViewListener actionListener) throws IOException {
+    public ScorePanel(ViewListener actionListener, Integer[] scores) throws IOException {
         myListener = actionListener;
-        scores = ScoreFile.getScores();
+        this.scores = scores;
         createScorePanel();
     }
 
@@ -64,18 +61,9 @@ public class ScorePanel extends JPanel {
         out.setText(text);
     }
 
-    // CR: this logic should be inside ScoreFile#addScore(int)
-    public void updateScores(int score){
-        if(score >= scores[9]) {
-            scores[9] = score;
-            Arrays.sort(scores, Collections.reverseOrder());
-            setScores();
-        }
+    public void update(Integer[] scores){
+        this.scores = scores;
+        setScores();
     }
-
-    public Integer[] getScores(){
-        return scores;
-    }
-
 
 }
