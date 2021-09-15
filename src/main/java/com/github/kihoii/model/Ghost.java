@@ -14,6 +14,8 @@ public class Ghost {
     public Ghost(int x, int y){
         this.x = x;
         this.y = y;
+        dx = Direction.NONE;
+        dy = Direction.NONE;
     }
 
     public int getX(){

@@ -40,19 +40,10 @@ public class Model {
         screenData = new short[HEIGHT * WIDTH];
     }
 
-    private void initGhosts(){
-        ghosts[0] = new Ghost(7 * BLOCK_SIZE, 6 * BLOCK_SIZE);
-        ghosts[1] = new Ghost(6 * BLOCK_SIZE, 6 * BLOCK_SIZE);
-        ghosts[2] = new Ghost(7 * BLOCK_SIZE, 7 * BLOCK_SIZE);
-        ghosts[3] = new Ghost(8 * BLOCK_SIZE, 7 * BLOCK_SIZE);
-    }
-
     private void initGame(){
         int size = WIDTH * HEIGHT;
         System.arraycopy(map, 0, screenData, 0, size);
-        initGhosts();
     }
-
 
     private void moveGhosts(){
         for(int i = 0; i < NUMBER_OF_GHOSTS; i++){

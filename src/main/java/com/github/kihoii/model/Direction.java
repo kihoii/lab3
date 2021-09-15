@@ -23,7 +23,7 @@ public enum Direction {
     },
     NONE(0){
         public boolean backwards(Direction d){
-            return false;
+            return true;
         }
     };
 

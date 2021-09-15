@@ -80,7 +80,7 @@ public class Pacman {
 
             }
 
-            if (!isPossibleToMove(dx, dy, curBlock)) {
+            if (dx != Direction.NONE && dy != Direction.NONE && !isPossibleToMove(dx, dy, curBlock)) {
                 dx = Direction.NONE;
                 dy = Direction.NONE;
                 return screenData;
