@@ -1,10 +1,10 @@
 package com.github.kihoii.model;
 
+import com.github.kihoii.*;
 import com.github.kihoii.utils.MapBlock;
 import com.github.kihoii.view.GameObject;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class Model {
 
@@ -18,14 +18,16 @@ public class Model {
     private static final int NUMBER_OF_GHOSTS = 4;
 
     private final short[] map;
+    private final GameConfig gameConfig;
 
     private Pacman pacman;
     private Ghost[] ghosts;
 
     private short[] screenData;
 
-    public Model(short[] map){
+    public Model(short[] map, GameConfig gameConfig){
         this.map = map;
+        this.gameConfig = gameConfig;
     }
 
     public void initNewModel()  {
@@ -34,8 +36,12 @@ public class Model {
     }
 
     private void initData(){
-        pacman = new Pacman(7 * BLOCK_SIZE, 12 * BLOCK_SIZE);
-        ghosts = new Ghost[NUMBER_OF_GHOSTS];
+        GameConfig.Position pacmanPosition = gameConfig.pacman();
+        this.pacman = new Pacman(pacmanPosition.x() * BLOCK_SIZE, pacmanPosition.y() * BLOCK_SIZE);
+        GameConfig.Position[] ghostsPosition = gameConfig.ghosts();
+        ghosts = Arrays.stream(ghostsPosition)
+                .map(p -> new Ghost(p.x() * BLOCK_SIZE, p.y() * BLOCK_SIZE))
+                .toArray(Ghost[]::new);
 
         screenData = new short[HEIGHT * WIDTH];
     }

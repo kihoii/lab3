@@ -23,7 +23,7 @@ public class Main {
     public static void main(String[] args) {
         short[] map = getMap();
 
-        Model model = new Model(map);
+        Model model = new Model(map, GameConfig.defaultConfig());
         controller = new Controller(model);
         View view = new View(controller, map);
         controller.setView(view);
