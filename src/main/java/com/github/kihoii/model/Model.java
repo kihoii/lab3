@@ -28,6 +28,7 @@ public class Model {
     public Model(short[] map, GameConfig gameConfig){
         this.map = map;
         this.gameConfig = gameConfig;
+        initNewModel();
     }
 
     public void initNewModel()  {

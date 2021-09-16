@@ -12,11 +12,16 @@ public class Controller extends KeyAdapter implements ViewListener {
 
     private View view;
 
+    private enum State {STARTED, STOPPED}
+    
+    private State state = State.STOPPED;
+
     public Controller(Model model) {
         this.model = model;
     }
 
     public void keyPressed(KeyEvent e) {
+        if (state == State.STOPPED) return;
         switch (e.getKeyCode()) {
             case KeyEvent.VK_DOWN ->
                 model.setDirection(Direction.DOWN);
@@ -44,8 +49,9 @@ public class Controller extends KeyAdapter implements ViewListener {
 
     @Override
     public void onAction(ActionType actionType){
+        state = actionType == ActionType.START || actionType == ActionType.RESUME ? State.STARTED : State.STOPPED;
         switch (actionType) {
-            case EXIT -> view.exitGame();
+            case EXIT -> System.exit(0);
             case START -> {
                 model.initNewModel();
                 view.startGame(model.getField(), model.getScore(), model.getLives());

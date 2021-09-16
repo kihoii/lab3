@@ -104,8 +104,4 @@ public class View {
         SwingUtilities.updateComponentTreeUI(mainWindow);
     }
 
-    public void exitGame(){
-        System.exit(0);
-    }
-
 }
