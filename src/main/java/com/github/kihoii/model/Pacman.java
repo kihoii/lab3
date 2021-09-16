@@ -75,14 +75,16 @@ public class Pacman {
                 } else {
                     dx = Direction.NONE;
                     dy = Direction.NONE;
+                    hit(ghosts);
                     return screenData;
                 }
 
             }
 
-            if (dx != Direction.NONE && dy != Direction.NONE && !isPossibleToMove(dx, dy, curBlock)) {
+            if (!isPossibleToMove(dx, dy, curBlock)) {
                 dx = Direction.NONE;
                 dy = Direction.NONE;
+                hit(ghosts);
                 return screenData;
             }
 
@@ -90,6 +92,12 @@ public class Pacman {
         x += dx.adjustSpeed(PACMAN_SPEED);
         y += dy.adjustSpeed(PACMAN_SPEED);
 
+        hit(ghosts);
+
+        return screenData;
+    }
+
+    private void hit(Ghost[] ghosts){
         boolean hit = false;
         for (int i = 0 ; i < 4; i++){
             if (x > (ghosts[i].getX() - 12)
@@ -109,8 +117,6 @@ public class Pacman {
             x = 7 * Model.BLOCK_SIZE;
             y = 12 * Model.BLOCK_SIZE;
         }
-
-        return screenData;
     }
 
     private static boolean isPossibleToMove(Direction x, Direction y, short curBlock){

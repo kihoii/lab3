@@ -94,6 +94,7 @@ public class Ghost {
 
         x += dx.adjustSpeed(SPEED);
         y += dy.adjustSpeed(SPEED);
+
     }
 
     private static boolean hasNoMoves(short block) {
