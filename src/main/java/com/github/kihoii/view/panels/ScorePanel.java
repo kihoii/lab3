@@ -11,7 +11,7 @@ import java.util.stream.*;
 
 public class ScorePanel extends JPanel {
 
-    private ScoreFile scoreFile;
+    private final ScoreFile scoreFile = new ScoreFile();
 
     private final JLabel label = new JLabel("<html><center>HIGH<br>SCORES</center></html>");
     private final JLabel out = new JLabel();
@@ -20,8 +20,6 @@ public class ScorePanel extends JPanel {
     private final Font smallFNT = new Font("arial", Font.BOLD, 20);
 
     public ScorePanel(ViewListener actionListener) throws IOException {
-        scoreFile = new ScoreFile();
-
         myListener = actionListener;
         createScorePanel();
     }

@@ -20,8 +20,6 @@ public class View {
     private final PausePanel pausePanel;
     private ScorePanel scorePanel;
 
-    //private final ScoreFile scoreFile = new ScoreFile();
-
     private JPanel curPanel;
 
     private final short[] map;
@@ -101,7 +99,6 @@ public class View {
 
     public void showScores(){
         mainWindow.remove(curPanel);
-        //scorePanel.updateScores(ScoreUtils.getScores());
         curPanel = scorePanel;
         mainWindow.add(curPanel);
         SwingUtilities.updateComponentTreeUI(mainWindow);

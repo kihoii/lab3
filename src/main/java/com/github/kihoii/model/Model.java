@@ -37,7 +37,7 @@ public class Model {
 
     private void initData(){
         GameConfig.Position pacmanPosition = gameConfig.pacman();
-        this.pacman = new Pacman(pacmanPosition.x() * BLOCK_SIZE, pacmanPosition.y() * BLOCK_SIZE);
+        pacman = new Pacman(pacmanPosition.x() * BLOCK_SIZE, pacmanPosition.y() * BLOCK_SIZE);
         GameConfig.Position[] ghostsPosition = gameConfig.ghosts();
         ghosts = Arrays.stream(ghostsPosition)
                 .map(p -> new Ghost(p.x() * BLOCK_SIZE, p.y() * BLOCK_SIZE))
@@ -47,8 +47,7 @@ public class Model {
     }
 
     private void initGame(){
-        int size = WIDTH * HEIGHT;
-        System.arraycopy(map, 0, screenData, 0, size);
+        System.arraycopy(map, 0, screenData, 0, WIDTH * HEIGHT);
     }
 
     private void moveGhosts(){

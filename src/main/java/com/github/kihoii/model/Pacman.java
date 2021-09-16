@@ -114,12 +114,10 @@ public class Pacman {
     }
 
     private static boolean isPossibleToMove(Direction x, Direction y, short curBlock){
-
         return (y == Direction.UP && x == Direction.NONE && !(MapBlock.UP_BORDER.is(curBlock)))
                 || (y == Direction.DOWN && x == Direction.NONE && !(MapBlock.D_BORDER.is(curBlock)))
                 || (y == Direction.NONE && x == Direction.RIGHT && !(MapBlock.R_BORDER.is(curBlock)))
                 || (y == Direction.NONE && x == Direction.LEFT && !(MapBlock.L_BORDER.is(curBlock)));
-
     }
 
 }
